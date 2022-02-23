@@ -93,7 +93,12 @@ namespace SBaier.DI
 		{
             if (!_nonLazyBindings.Has(binding))
                 return;
-            CreateInstance<object>(binding);
+            if(binding.ConcreteType.IsSubclassOf(typeof(Component)))
+                CreateInstance<Component>(binding);
+            else if(binding.ConcreteType.IsSubclassOf(typeof(UnityEngine.Object)))
+                CreateInstance<UnityEngine.Object>(binding);
+            else 
+                CreateInstance<object>(binding);
             _nonLazyBindings.TryRemoving(binding);
         }
 
