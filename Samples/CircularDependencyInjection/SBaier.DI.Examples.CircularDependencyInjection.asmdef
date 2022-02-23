@@ -1,0 +1,16 @@
+{
+    "name": "SBaier.DI.Examples.CircularDependencyInjection",
+    "rootNamespace": "SBaier.DI.Examples.CircularDependencyInjection",
+    "references": [
+        "GUID:a4e2fcc097ca52d46a2cc62ef3c5e9bf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

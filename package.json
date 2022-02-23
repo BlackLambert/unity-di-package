@@ -1,0 +1,23 @@
+{
+  "name": "com.sbaier.unitydi",
+  "version": "1.0.0",
+  "displayName": "Unity Dependency Injection",
+  "description": "A lightweight dependency injection framework for the Unity Engine.",
+  "unity": "2021.2",
+  "unityRelease": "",
+  "documentationUrl": "https://github.com/BlackLambert/unity-di-package",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "dependencies": {
+    "nuget.moq": "1.0.0"
+ },
+ "keywords": [
+    "dependency injection",
+    "dependency inversion"
+  ],
+  "author": {
+    "name": "Sebastian Baier",
+    "email": "",
+    "url": ""
+  }
+}
