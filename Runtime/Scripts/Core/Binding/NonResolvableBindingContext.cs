@@ -20,5 +20,10 @@ namespace SBaier.DI
 		{
 			return new ToComponentBindingContext<TConcrete>(_arguments);
 		}
+
+		public ToObjectBindingContext<TConcrete> OfObject<TConcrete>() where TConcrete : UnityEngine.Object
+		{
+			return new ToObjectBindingContext<TConcrete>(_arguments);
+		}
 	}
 }

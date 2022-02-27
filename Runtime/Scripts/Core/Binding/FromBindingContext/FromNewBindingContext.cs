@@ -7,7 +7,7 @@ namespace SBaier.DI
 		{
 			_binding.ConcreteType = typeof(TConcrete);
 			_binding.CreationMode = InstanceCreationMode.FromNew;
-			_binding.CreateInstanceFunction = () => new TConcrete();
+			_binding.ProvideInstanceFunction = () => new TConcrete();
 		}
 	}
 }

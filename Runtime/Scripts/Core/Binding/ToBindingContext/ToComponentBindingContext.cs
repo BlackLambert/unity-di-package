@@ -10,14 +10,14 @@ namespace SBaier.DI
 		{
 			ValidateHasComponent(prefab);
 			_binding.CreationMode = InstanceCreationMode.FromPrefabInstance;
-			_binding.CreateInstanceFunction = () => prefab;
+			_binding.ProvideInstanceFunction = () => prefab;
 			return new FromBindingContext(_arguments);
 		}
 
 		public FromBindingContext FromNewPrefabInstance(TConcrete prefab)
 		{
 			_binding.CreationMode = InstanceCreationMode.FromPrefabInstance;
-			_binding.CreateInstanceFunction = () => prefab.gameObject;
+			_binding.ProvideInstanceFunction = () => prefab.gameObject;
 			return new FromBindingContext(_arguments);
 		}
 
@@ -25,14 +25,14 @@ namespace SBaier.DI
 		{
 			ValidateResourcePath(path);
 			_binding.CreationMode = InstanceCreationMode.FromResourcePrefabInstance;
-			_binding.CreateInstanceFunction = () => path;
+			_binding.ProvideInstanceFunction = () => path;
 			return new FromBindingContext(_arguments);
 		}
 
 		public FromBindingContext FromNewComponentOn(GameObject gameObject)
 		{
 			_binding.CreationMode = InstanceCreationMode.FromNewComponentOn;
-			_binding.CreateInstanceFunction = () => AddComponentTo(gameObject);
+			_binding.ProvideInstanceFunction = () => AddComponentTo(gameObject);
 			return new FromBindingContext(_arguments);
 		}
 
@@ -41,7 +41,7 @@ namespace SBaier.DI
 		{
 			name = string.IsNullOrEmpty(name) ? $"{nameof(TConcrete)}Object" : name;
 			_binding.CreationMode = InstanceCreationMode.FromNewComponentOnNewGameObject;
-			_binding.CreateInstanceFunction = () => AddComponentToNew(name, parent, worldPositionStays);
+			_binding.ProvideInstanceFunction = () => AddComponentToNew(name, parent, worldPositionStays);
 			return new FromBindingContext(_arguments);
 		}
 

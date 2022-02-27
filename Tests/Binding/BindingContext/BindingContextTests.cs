@@ -96,12 +96,12 @@ namespace SBaier.DI.Tests
 
 		private void ThenCreationFunctionCreatesInstanceOfConcreteType(Binding binding)
 		{
-			Assert.IsTrue(binding.CreateInstanceFunction() is Bar);
+			Assert.IsTrue(binding.ProvideInstanceFunction() is Bar);
 		}
 
 		private void ThenConcreteInstanceIsCreatedByDefaultConstructor(Binding binding)
 		{
-			Bar bar = binding.CreateInstanceFunction() as Bar;
+			Bar bar = binding.ProvideInstanceFunction() as Bar;
 			Assert.AreEqual(_barNumConstructorValue, bar.Num);
 		}
 

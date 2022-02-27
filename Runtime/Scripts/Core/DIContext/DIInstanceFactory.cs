@@ -14,7 +14,7 @@ namespace  SBaier.DI
                 case InstanceCreationMode.FromInstance:
                 case InstanceCreationMode.FromNewComponentOn:
                 case InstanceCreationMode.FromResources:
-                    return (TInstance) binding.CreateInstanceFunction();
+                    return (TInstance) binding.ProvideInstanceFunction();
                 case InstanceCreationMode.FromFactory:
                     return CreateByFactory<TInstance>(resolver);
                 case InstanceCreationMode.FromPrefabInstance:
@@ -37,13 +37,13 @@ namespace  SBaier.DI
 
         private TInstance CreatePrefabInstance<TInstance>(Binding binding)
         {
-            GameObject prefab = binding.CreateInstanceFunction() as GameObject;
+            GameObject prefab = binding.ProvideInstanceFunction() as GameObject;
             return CreatePrefabInstance<TInstance>(prefab);
         }
 
         private TInstance CreatePrefabInstanceFromRessources<TInstance>(Binding binding)
         {
-            string path = binding.CreateInstanceFunction() as string;
+            string path = binding.ProvideInstanceFunction() as string;
             return CreatePrefabInstance<TInstance>(Resources.Load<GameObject>(path));
         }
 

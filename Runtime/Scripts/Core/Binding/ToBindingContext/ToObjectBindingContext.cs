@@ -10,7 +10,7 @@ namespace SBaier.DI
         {
             ValidateRessource(path);
             _binding.CreationMode = InstanceCreationMode.FromResources;
-            _binding.CreateInstanceFunction = () => Resources.Load<TConcrete>(path);
+            _binding.ProvideInstanceFunction = () => Resources.Load<TConcrete>(path);
             return new FromBindingContext(_arguments);
         }
 

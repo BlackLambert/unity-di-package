@@ -5,9 +5,9 @@ namespace SBaier.DI
 {
 	public class DIContainerBinder : Binder
 	{
-		private DIContainers _container;
+		private BindingStorage _container;
 
-		public DIContainerBinder(DIContainers container)
+		public DIContainerBinder(BindingStorage container)
 		{
 			_container = container;
 		}
@@ -29,9 +29,19 @@ namespace SBaier.DI
             return Bind<TContract>(iD).ToNew<TContract>();
         }
 
-        public AsBindingContext BindInstance<TContract>(TContract instance, IComparable iD = null)
+        public AsBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null)
         {
             return BindToSelf<TContract>(iD).FromInstanceAsSingle(instance);
+        }
+
+        public ToComponentBindingContext<TContract> BindComponent<TContract>(IComparable iD = null) where TContract : Component
+        {
+            return Bind<TContract>(iD).ToComponent<TContract>();
+        }
+
+        public ToObjectBindingContext<TContract> BindObject<TContract>(IComparable iD = null) where TContract : UnityEngine.Object
+        {
+            return Bind<TContract>(iD).ToObject<TContract>();
         }
 
         public NonResolvableBindingContext CreateNonResolvableInstance()
@@ -45,15 +55,5 @@ namespace SBaier.DI
             Type contractType = typeof(TContract);
             return new Binding(contractType);
         }
-
-		public ToComponentBindingContext<TContract> BindComponent<TContract>(IComparable iD = null) where TContract : Component
-		{
-            return Bind<TContract>().ToComponent<TContract>();
-		}
-
-		public ToObjectBindingContext<TContract> BindObject<TContract>(IComparable iD = null) where TContract : UnityEngine.Object
-		{
-            return Bind<TContract>().ToObject<TContract>();
-		}
 	}
 }

@@ -10,7 +10,7 @@ namespace SBaier.DI.Tests
 		public List<Binding> Bindings { get; } = new List<Binding>();
 		public List<Binding> NonResolvableBindings { get; } = new List<Binding>();
 
-		BindingContext<TContract> Binder.Bind<TContract>(IComparable iD = null)
+		BindingContext<TContract> Binder.Bind<TContract>(IComparable iD)
 		{
 			return new BindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
 		}
@@ -20,7 +20,7 @@ namespace SBaier.DI.Tests
 			return new ToComponentBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
 		}
 
-		AsBindingContext Binder.BindInstance<TContract>(TContract instance, IComparable iD)
+		AsBindingContext Binder.BindSingleInstance<TContract>(TContract instance, IComparable iD)
 		{
 			return new AsBindingContext(CreateAndInitBindingArguments<TContract>(iD));
 		}

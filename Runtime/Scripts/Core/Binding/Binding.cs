@@ -8,7 +8,7 @@ namespace SBaier.DI
         public Type ConcreteType;
         public InstanceCreationMode CreationMode;
         public InstanceAmountMode AmountMode;
-        public Func<object> CreateInstanceFunction;
+        public Func<object> ProvideInstanceFunction;
         public bool InjectionAllowed;
         public Dictionary<BindingKey, object> Arguments { get; } =
             new Dictionary<BindingKey, object>();
@@ -18,7 +18,7 @@ namespace SBaier.DI
             ConcreteType = contractType;
             CreationMode = InstanceCreationMode.Undefined;
             AmountMode = InstanceAmountMode.PerRequest;
-            CreateInstanceFunction = null;
+            ProvideInstanceFunction = null;
             InjectionAllowed = true;
         }
 
@@ -27,7 +27,7 @@ namespace SBaier.DI
             return $"Binding (" +
                 $"Concrete: {ConcreteType} | " +
                 $"CreationMode: {CreationMode} | " +
-                $"CreateInstanceFunction: {CreateInstanceFunction} | " +
+                $"CreateInstanceFunction: {ProvideInstanceFunction} | " +
                 $"AmountMode: {AmountMode} | " +
                 $"InjectionAllowed: {InjectionAllowed})" +
                 $"Arguments: {Arguments}";

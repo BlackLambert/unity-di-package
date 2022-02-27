@@ -26,7 +26,7 @@ namespace SBaier.DI.Tests
             Binding binding = new Binding(typeof(Foo));
             binding.ConcreteType = typeof(Bar);
             binding.AmountMode = InstanceAmountMode.Single;
-            binding.CreateInstanceFunction = () => new Bar();
+            binding.ProvideInstanceFunction = () => new Bar();
             binding.CreationMode = InstanceCreationMode.FromMethod;
             binding.InjectionAllowed = true;
             AddArguments(binding);
@@ -42,7 +42,7 @@ namespace SBaier.DI.Tests
         {
             Assert.IsTrue(bindingString.Contains(binding.ConcreteType.ToString()));
             Assert.IsTrue(bindingString.Contains(binding.AmountMode.ToString()));
-            Assert.IsTrue(bindingString.Contains(binding.CreateInstanceFunction.ToString()));
+            Assert.IsTrue(bindingString.Contains(binding.ProvideInstanceFunction.ToString()));
             Assert.IsTrue(bindingString.Contains(binding.CreationMode.ToString()));
             Assert.IsTrue(bindingString.Contains(binding.InjectionAllowed.ToString()));
             Assert.IsTrue(bindingString.Contains(binding.Arguments.ToString()));

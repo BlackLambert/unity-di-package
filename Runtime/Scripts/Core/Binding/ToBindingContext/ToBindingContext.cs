@@ -12,7 +12,7 @@ namespace SBaier.DI
         public AsBindingContext FromInstanceAsSingle(TConcrete instance)
         {
             _binding.CreationMode = InstanceCreationMode.FromInstance;
-            _binding.CreateInstanceFunction = () => instance;
+            _binding.ProvideInstanceFunction = () => instance;
             _binding.InjectionAllowed = false;
             _binding.AmountMode = InstanceAmountMode.Single;
             return new AsBindingContext(_arguments);
@@ -21,7 +21,7 @@ namespace SBaier.DI
         public FromBindingContext FromMethod(Func<TConcrete> create)
         {
             _binding.CreationMode = InstanceCreationMode.FromMethod;
-            _binding.CreateInstanceFunction = () => create();
+            _binding.ProvideInstanceFunction = () => create();
             return new FromBindingContext(_arguments);
         }
 
