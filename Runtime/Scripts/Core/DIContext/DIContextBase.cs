@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SBaier.DI
@@ -35,7 +36,8 @@ namespace SBaier.DI
 
         public void ValidateBindings()
 		{
-            IEnumerable<Binding> bindings = _bindings.GetBindings();
+            List<Binding> bindings = _bindings.GetBindings().ToList();
+            bindings.AddRange(_nonLazyBindings.GetCopy());
             foreach (Binding binding in bindings)
                 _bindingValidator.Validate(binding);
         }
