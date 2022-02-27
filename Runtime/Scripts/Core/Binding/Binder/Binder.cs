@@ -6,7 +6,7 @@ namespace SBaier.DI
     public interface Binder
     {
         public BindingContext<TContract> Bind<TContract>(IComparable iD = default);
-        public AsBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null);
+        public FromInstanceBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null);
         public ToBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default);
         public FromNewBindingContext<TContract> BindToNewSelf<TContract>(IComparable iD = default) where TContract : new();
         public ToComponentBindingContext<TContract> BindComponent<TContract>(IComparable iD = default) where TContract : Component;

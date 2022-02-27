@@ -20,9 +20,9 @@ namespace SBaier.DI.Tests
 			return new ToComponentBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
 		}
 
-		AsBindingContext Binder.BindSingleInstance<TContract>(TContract instance, IComparable iD)
+		FromInstanceBindingContext Binder.BindSingleInstance<TContract>(TContract instance, IComparable iD)
 		{
-			return new AsBindingContext(CreateAndInitBindingArguments<TContract>(iD));
+			return new FromInstanceBindingContext(CreateAndInitBindingArguments<TContract>(iD));
 		}
 
 		ToObjectBindingContext<TContract> Binder.BindObject<TContract>(IComparable iD) 

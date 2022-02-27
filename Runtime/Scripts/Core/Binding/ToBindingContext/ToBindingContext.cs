@@ -9,13 +9,12 @@ namespace SBaier.DI
             _binding.ConcreteType = typeof(TConcrete);
         }
         
-        public AsBindingContext FromInstanceAsSingle(TConcrete instance)
+        public FromInstanceBindingContext FromInstanceAsSingle(TConcrete instance)
         {
             _binding.CreationMode = InstanceCreationMode.FromInstance;
             _binding.ProvideInstanceFunction = () => instance;
-            _binding.InjectionAllowed = false;
             _binding.AmountMode = InstanceAmountMode.Single;
-            return new AsBindingContext(_arguments);
+            return new FromInstanceBindingContext(_arguments);
         }
 
         public FromBindingContext FromMethod(Func<TConcrete> create)

@@ -17,7 +17,7 @@ namespace SBaier.DI
         {
             binder.BindToNewSelf<GameObjectInjector>();
             binder.BindToNewSelf<SceneInjector>();
-            binder.BindToSelf<DIContext>().FromInstanceAsSingle(_diContext);
+            binder.BindSingleInstance(_diContext).WithoutInjection();
             binder.BindToNewSelf<DIInstanceFactory>();
             binder.BindToSelf<DIContainers>().FromFactory();
             binder.Bind<Factory<DIContainers>>().ToNew<DIContainersFactory>();

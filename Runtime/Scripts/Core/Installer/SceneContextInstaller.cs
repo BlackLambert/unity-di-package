@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace SBaier.DI
 {
@@ -16,8 +15,8 @@ namespace SBaier.DI
         
         public void InstallBindings(Binder binder)
         {
-            binder.BindToSelf<Scene>().FromInstanceAsSingle(_contextObject.scene);
-            binder.BindToSelf<DIContext>().FromInstanceAsSingle(_diContext);
+            binder.BindSingleInstance(_contextObject.scene);
+            binder.BindSingleInstance(_diContext).WithoutInjection();
             binder.Bind<Factory<ChildDIContext, DIContext>>().ToNew<ChildDIContextFactory>();
         }
     }

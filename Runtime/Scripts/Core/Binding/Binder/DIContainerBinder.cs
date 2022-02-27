@@ -29,7 +29,7 @@ namespace SBaier.DI
             return Bind<TContract>(iD).ToNew<TContract>();
         }
 
-        public AsBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null)
+        public FromInstanceBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null)
         {
             return BindToSelf<TContract>(iD).FromInstanceAsSingle(instance);
         }
