@@ -4,8 +4,8 @@ namespace SBaier.DI
 	{
 		public void InstallBindings(Binder binder)
 		{
-			binder.Bind<FromBindingValidator>().ToNew<FromBindingValidatorImpl>();
-			binder.BindToNewSelf<BindingValidator>();
+			binder.Bind<InstanceCreationModeValidator>().ToNew<InstanceCreationModeValidatorImpl>();
+			binder.BindToNewSelf<InstantiationInfoValidator>();
 		}
 	}
 }

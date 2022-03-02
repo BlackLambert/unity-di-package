@@ -15,8 +15,8 @@ namespace SBaier.DI
         
         public void InstallBindings(Binder binder)
         {
-            binder.BindSingleInstance(_contextObject.scene);
-            binder.BindSingleInstance(_diContext).WithoutInjection();
+            binder.BindInstance(_contextObject.scene);
+            binder.BindInstance(_diContext).WithoutInjection();
             binder.Bind<Factory<ChildDIContext, DIContext>>().ToNew<ChildDIContextFactory>();
         }
     }

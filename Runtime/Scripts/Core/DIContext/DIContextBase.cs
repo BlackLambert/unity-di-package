@@ -9,14 +9,14 @@ namespace SBaier.DI
     {
         private DIContainers _container;
         private DIInstanceFactory _instanceFactory;
-        private BindingValidator _bindingValidator;
+        private InstantiationInfoValidator _bindingValidator;
         private GameObjectInjector _gameObjectInjector;
 
         private Resolver _dIContainerResolver;
         private Binder _dIContainerBinder;
 
         private BindingsContainer _bindings => _container.Bindings;
-        private NonLazyContainer _nonLazyBindings => _container.NonLazyBindings;
+        private NonLazyContainer _nonLazyBindings => _container.NonLazyInstanceInfos;
         private SingleInstancesContainer _singleInstances => _container.SingleInstances;
 
         void Injectable.Inject(Resolver resolver)
@@ -30,22 +30,22 @@ namespace SBaier.DI
         {
             _container = resolver.Resolve<DIContainers>();
             _instanceFactory = resolver.Resolve<DIInstanceFactory>();
-            _bindingValidator = resolver.Resolve<BindingValidator>();
+            _bindingValidator = resolver.Resolve<InstantiationInfoValidator>();
             _gameObjectInjector = resolver.Resolve<GameObjectInjector>();
         }
 
         public void ValidateBindings()
 		{
-            List<Binding> bindings = _bindings.GetBindings().ToList();
-            bindings.AddRange(_nonLazyBindings.GetCopy());
-            foreach (Binding binding in bindings)
+            List<InstantiationInfo> instantiationInfo = _bindings.GetInstantiationInfos().ToList();
+            instantiationInfo.AddRange(_nonLazyBindings.GetCopy());
+            foreach (Binding binding in instantiationInfo)
                 _bindingValidator.Validate(binding);
         }
 
         public void CreateNonLazyInstances()
         {
-            foreach(Binding binding in _nonLazyBindings.GetCopy())
-                CreateNonLazyInstance(binding);
+            foreach(InstantiationInfo instantiationInfo in _nonLazyBindings.GetCopy())
+                CreateNonLazyInstance(instantiationInfo);
         }
 
         public Resolver GetResolver()
@@ -84,65 +84,65 @@ namespace SBaier.DI
             return instance;
         }
 
-        private TContract CreateInstance<TContract>(Binding binding)
+        private TContract CreateInstance<TContract>(InstantiationInfo instantiationInfo)
         {
-            TContract instance = _instanceFactory.Create<TContract>(GetResolver(), binding);
-            TryInjection(instance, binding);
+            TContract instance = _instanceFactory.Create<TContract>(GetResolver(), instantiationInfo);
+            TryInjection(instance, instantiationInfo);
             return instance;
         }
 
-        private void CreateNonLazyInstance(Binding binding)
+        private void CreateNonLazyInstance(InstantiationInfo instantiationInfo)
 		{
-            if (!_nonLazyBindings.Has(binding))
+            if (!_nonLazyBindings.Has(instantiationInfo))
                 return;
-            if(binding.ConcreteType.IsSubclassOf(typeof(Component)))
-                CreateInstance<Component>(binding);
-            else if(binding.ConcreteType.IsSubclassOf(typeof(UnityEngine.Object)))
-                CreateInstance<UnityEngine.Object>(binding);
+            if(instantiationInfo.ConcreteType.IsSubclassOf(typeof(Component)))
+                CreateInstance<Component>(instantiationInfo);
+            else if(instantiationInfo.ConcreteType.IsSubclassOf(typeof(UnityEngine.Object)))
+                CreateInstance<UnityEngine.Object>(instantiationInfo);
             else 
-                CreateInstance<object>(binding);
-            _nonLazyBindings.TryRemoving(binding);
+                CreateInstance<object>(instantiationInfo);
+            _nonLazyBindings.TryRemoving(instantiationInfo);
         }
 
-        private void TryInjection<TContract>(TContract instance, Binding binding)
+        private void TryInjection<TContract>(TContract instance, InstantiationInfo instantiationInfo)
         {
-            if (!binding.InjectionAllowed)
+            if (!instantiationInfo.InjectionAllowed)
                 return;
             if (instance is Component)
-                InjectIntoComponent(instance as Component, binding);
+                InjectIntoComponent(instance as Component, instantiationInfo);
             else if (instance is GameObject)
-                InjectIntoGameObject(instance as GameObject, binding);
+                InjectIntoGameObject(instance as GameObject, instantiationInfo);
             else
-                InjectIntoInstance(instance, binding);
+                InjectIntoInstance(instance, instantiationInfo);
         }
 
-        private void InjectIntoGameObject(GameObject gameObject, Binding binding)
+        private void InjectIntoGameObject(GameObject gameObject, InstantiationInfo instantiationInfo)
         {
-            InjectIntoTransform(gameObject.transform, binding);
+            InjectIntoTransform(gameObject.transform, instantiationInfo);
         }
 
-        private void InjectIntoComponent(Component component, Binding binding)
+        private void InjectIntoComponent(Component component, InstantiationInfo instantiationInfo)
 		{
-            InjectIntoTransform(component.transform, binding);
+            InjectIntoTransform(component.transform, instantiationInfo);
         }
 
-        private void InjectIntoTransform(Transform transform, Binding binding)
+        private void InjectIntoTransform(Transform transform, InstantiationInfo instantiationInfo)
         {
-            _gameObjectInjector.InjectIntoContextHierarchy(transform, GetResolverFor(binding));
+            _gameObjectInjector.InjectIntoContextHierarchy(transform, GetResolverFor(instantiationInfo));
         }
 
-        private void InjectIntoInstance<TContract>(TContract instance, Binding binding)
+        private void InjectIntoInstance<TContract>(TContract instance, InstantiationInfo instantiationInfo)
 		{
             Injectable injectable = instance as Injectable;
             if (injectable == null)
                 return;
-            injectable.Inject(GetResolverFor(binding));
+            injectable.Inject(GetResolverFor(instantiationInfo));
         }
 
-        private Resolver GetResolverFor(Binding binding)
+        private Resolver GetResolverFor(InstantiationInfo instantiationInfo)
         {
             ArgumentsResolver result = new ArgumentsResolver(GetResolver());
-            result.AddArguments(binding.Arguments);
+            result.AddArguments(instantiationInfo.Arguments);
             return result;
         }
 

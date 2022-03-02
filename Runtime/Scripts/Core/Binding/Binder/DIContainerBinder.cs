@@ -12,14 +12,16 @@ namespace SBaier.DI
 			_container = container;
 		}
 
-        public BindingContext<TContract> Bind<TContract>(IComparable iD = default)
+        public ConcreteBindingContext<TContract> Bind<TContract>(IComparable iD = default)
         {
             Binding binding = CreateBinding<TContract>();
             _container.AddBinding<TContract>(binding, iD);
-            return new BindingContext<TContract>(new BindingArguments(binding, _container));
+            BindingArguments arguments = new BindingArguments(binding, _container);
+            arguments.Keys.Add(new BindingKey(typeof(TContract), iD));
+            return new ConcreteBindingContext<TContract>(arguments);
         }
 
-        public ToBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default)
+        public CreationModeBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default)
         {
             return Bind<TContract>(iD).To<TContract>();
         }
@@ -29,25 +31,19 @@ namespace SBaier.DI
             return Bind<TContract>(iD).ToNew<TContract>();
         }
 
-        public FromInstanceBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null)
+        public FromInstanceBindingContext BindInstance<TContract>(TContract instance, IComparable iD = null)
         {
-            return BindToSelf<TContract>(iD).FromInstanceAsSingle(instance);
+            return BindToSelf<TContract>(iD).FromInstance(instance);
         }
 
-        public ToComponentBindingContext<TContract> BindComponent<TContract>(IComparable iD = null) where TContract : Component
+        public ComponentCreationModeBindingContext<TContract> BindComponent<TContract>(IComparable iD = null) where TContract : Component
         {
             return Bind<TContract>(iD).ToComponent<TContract>();
         }
 
-        public ToObjectBindingContext<TContract> BindObject<TContract>(IComparable iD = null) where TContract : UnityEngine.Object
+        public ObjectCreationModeBindingContext<TContract> BindObject<TContract>(IComparable iD = null) where TContract : UnityEngine.Object
         {
             return Bind<TContract>(iD).ToObject<TContract>();
-        }
-
-        public NonResolvableBindingContext CreateNonResolvableInstance()
-        {
-            Binding binding = CreateBinding<object>();
-            return new NonResolvableBindingContext(new BindingArguments(binding, _container));
         }
 
         private Binding CreateBinding<TContract>()

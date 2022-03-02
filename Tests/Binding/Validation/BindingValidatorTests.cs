@@ -7,9 +7,9 @@ namespace SBaier.DI.Tests
     public class BindingValidatorTests
     {
         private BasicInstanceResolver _resolver;
-        private BindingValidator _bindingValidator;
+        private InstantiationInfoValidator _bindingValidator;
         private Binding _binding;
-        private Mock<FromBindingValidator> _fromValidatorMock;
+        private Mock<InstanceCreationModeValidator> _fromValidatorMock;
         private bool _validateOfFromValidatorCalled = false;
 
         [SetUp]
@@ -55,8 +55,8 @@ namespace SBaier.DI.Tests
 
 		private void GivenADefaultValidator()
 		{
-            _bindingValidator = new BindingValidator();
-            _fromValidatorMock = new Mock<FromBindingValidator>();
+            _bindingValidator = new InstantiationInfoValidator();
+            _fromValidatorMock = new Mock<InstanceCreationModeValidator>();
             _fromValidatorMock.Setup(v => v.Validate(It.IsAny<Binding>())).
                 Callback(SetValidateOfFromValidatorCalledTrue);
             _resolver.Add(_fromValidatorMock.Object);

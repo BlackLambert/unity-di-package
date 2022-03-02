@@ -21,7 +21,7 @@ namespace SBaier.DI
 		public Resolver CreateBasicDIContextResolver()
 		{
             BasicInstanceResolver result = new BasicInstanceResolver();
-            BindingValidator validator = new BindingValidator();
+            InstantiationInfoValidator validator = new InstantiationInfoValidator();
             (validator as Injectable).Inject(CreateBindingValidatorResolver());
             result.Add(validator);
             result.Add(new GameObjectInjector());
@@ -33,7 +33,7 @@ namespace SBaier.DI
         private Resolver CreateBindingValidatorResolver()
 		{
             BasicInstanceResolver result = new BasicInstanceResolver();
-            result.Add<FromBindingValidator>(new FromBindingValidatorImpl());
+            result.Add<InstanceCreationModeValidator>(new InstanceCreationModeValidatorImpl());
             return result;
         }
     }

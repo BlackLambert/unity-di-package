@@ -30,6 +30,17 @@ namespace SBaier.DI
             return _bindings.Values;
         }
 
+        public IEnumerable<InstantiationInfo> GetInstantiationInfos()
+        {
+            return _bindings.Values;
+        }
+
+        public void Remove(BindingKey key)
+		{
+            ValidateBindingExists(key);
+            _bindings.Remove(key);
+        }
+
         public bool HasBinding(BindingKey key)
         {
             return _bindings.ContainsKey(key);

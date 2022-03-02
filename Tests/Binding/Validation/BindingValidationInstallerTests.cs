@@ -12,7 +12,7 @@ namespace SBaier.DI.Tests
 		{
 			GivenADefaultSetup();
 			WhenInstallBindingsIsCalledOn(_binder);
-			ThenIsBound<BindingValidator>(_binder);
+			ThenIsBound<InstantiationInfoValidator>(_binder);
 		}
 
         [Test]
@@ -20,7 +20,7 @@ namespace SBaier.DI.Tests
 		{
             GivenADefaultSetup();
 			WhenInstallBindingsIsCalledOn(_binder);
-			ThenIsBound<FromBindingValidator>(_binder);
+			ThenIsBound<InstanceCreationModeValidator>(_binder);
 		}
 
 		private void GivenADefaultSetup()

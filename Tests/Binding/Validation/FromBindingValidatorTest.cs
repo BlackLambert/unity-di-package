@@ -6,7 +6,7 @@ namespace SBaier.DI.Tests
     public class FromBindingValidatorTest
     {
         private List<Binding> _bindings = new List<Binding>();
-        private FromBindingValidator _validator;
+        private InstanceCreationModeValidator _validator;
 
         [SetUp]
         public void Setup()
@@ -59,7 +59,7 @@ namespace SBaier.DI.Tests
 
 		private void GivenADefaultValidator()
 		{
-            _validator = new FromBindingValidatorImpl();
+            _validator = new InstanceCreationModeValidatorImpl();
         }
 
         private void WhenValidateIsCalledOn(Binding binding)

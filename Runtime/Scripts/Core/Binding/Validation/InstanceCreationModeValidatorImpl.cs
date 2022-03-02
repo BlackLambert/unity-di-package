@@ -2,14 +2,14 @@ using System;
 
 namespace SBaier.DI
 {
-    public class FromBindingValidatorImpl : FromBindingValidator
+    public class InstanceCreationModeValidatorImpl : InstanceCreationModeValidator
     {
-        public override void Validate(Binding binding)
+        public override void Validate(InstantiationInfo instantiationInfo)
         {
-            switch(binding.CreationMode)
+            switch(instantiationInfo.CreationMode)
 			{
                 case InstanceCreationMode.Undefined:
-                    throw new InvalidBindingException($"{binding} has no creation mode defined." +
+                    throw new InvalidBindingException($"{instantiationInfo} has no creation mode defined." +
                         $"Please specify the creation mode.");
                 case InstanceCreationMode.FromFactory:
                 case InstanceCreationMode.FromInstance:

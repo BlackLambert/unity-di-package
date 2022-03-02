@@ -2,32 +2,36 @@ using System;
 
 namespace SBaier.DI
 {
-    public class ToBindingContext<TConcrete> : BindingContextBase
+    public class CreationModeBindingContext<TConcrete> 
     {
-        public ToBindingContext(BindingArguments bindingArguments) : base(bindingArguments)
+        protected BindingArguments _arguments;
+        protected Binding _binding => _arguments.Binding;
+
+
+        public CreationModeBindingContext(BindingArguments arguments)
         {
+            _arguments = arguments;
             _binding.ConcreteType = typeof(TConcrete);
         }
         
-        public FromInstanceBindingContext FromInstanceAsSingle(TConcrete instance)
+        public FromInstanceBindingContext FromInstance(TConcrete instance)
         {
             _binding.CreationMode = InstanceCreationMode.FromInstance;
             _binding.ProvideInstanceFunction = () => instance;
-            _binding.AmountMode = InstanceAmountMode.Single;
             return new FromInstanceBindingContext(_arguments);
         }
 
-        public FromBindingContext FromMethod(Func<TConcrete> create)
+        public ArgumentsBindingContext FromMethod(Func<TConcrete> create)
         {
             _binding.CreationMode = InstanceCreationMode.FromMethod;
             _binding.ProvideInstanceFunction = () => create();
-            return new FromBindingContext(_arguments);
+            return new ArgumentsBindingContext(_arguments);
         }
 
-        public FromBindingContext FromFactory()
+        public ArgumentsBindingContext FromFactory()
         {
             _binding.CreationMode = InstanceCreationMode.FromFactory;
-            return new FromBindingContext(_arguments);
+            return new ArgumentsBindingContext(_arguments);
         }
     }
 }

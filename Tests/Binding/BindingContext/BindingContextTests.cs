@@ -13,7 +13,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_To_BindsConcreteType()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToIsCalled(context);
 			ThenBindingContainsConcreteType(binding);
 		}
@@ -22,7 +22,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_ToNew_BindsConcreteType()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToNewIsCalled(context);
 			ThenBindingContainsConcreteType(binding);
 		}
@@ -31,7 +31,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_ToNew_SetsCreationModeToFromNew()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToNewIsCalled(context);
 			ThenCreationModeIsFromNew(binding);
 		}
@@ -40,7 +40,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_ToNew_CreationFunctionCreatesInstanceOfConcreteType()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToNewIsCalled(context);
 			ThenCreationFunctionCreatesInstanceOfConcreteType(binding);
 		}
@@ -49,7 +49,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_ToNew_CreationFunctionCreatesDefaultConcreteType()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToNewIsCalled(context);
 			ThenCreationFunctionCreatesInstanceOfConcreteType(binding);
 		}
@@ -58,7 +58,7 @@ namespace SBaier.DI.Tests
 		public void BindingContext_ToNew_CreationFunctionCallesDefaultConstructor()
 		{
 			Binding binding = GivenANewBinding();
-			BindingContext<Foo> context = GivenANewBindingContext(binding);
+			ConcreteBindingContext<Foo> context = GivenANewBindingContext(binding);
 			WhenToNewIsCalled(context);
 			ThenConcreteInstanceIsCreatedByDefaultConstructor(binding);
 		}
@@ -68,18 +68,18 @@ namespace SBaier.DI.Tests
 			return new Binding(typeof(Foo));
 		}
 
-		private BindingContext<Foo> GivenANewBindingContext(Binding binding)
+		private ConcreteBindingContext<Foo> GivenANewBindingContext(Binding binding)
 		{
 			BindingArguments arguments = new BindingArguments(binding, new Mock<BindingStorage>().Object);
-			return new BindingContext<Foo>(arguments);
+			return new ConcreteBindingContext<Foo>(arguments);
 		}
 
-		private void WhenToIsCalled(BindingContext<Foo> context)
+		private void WhenToIsCalled(ConcreteBindingContext<Foo> context)
 		{
 			context.To<Bar>();
 		}
 
-		private void WhenToNewIsCalled(BindingContext<Foo> context)
+		private void WhenToNewIsCalled(ConcreteBindingContext<Foo> context)
 		{
 			context.ToNew<Bar>();
 		}

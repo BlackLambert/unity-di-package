@@ -4,27 +4,27 @@ namespace SBaier.DI
 {
     public class NonLazyContainer
     {
-        private HashSet<Binding> _nonLazyBindings = new HashSet<Binding>();
+        private HashSet<InstantiationInfo> _nonLazyInstanceInfos = new HashSet<InstantiationInfo>();
 
-        public void TryRemoving(Binding binding)
+        public void TryRemoving(InstantiationInfo binding)
         {
             if (Has(binding))
-                _nonLazyBindings.Remove(binding);
+                _nonLazyInstanceInfos.Remove(binding);
         }
 
-        public bool Has(Binding binding)
+        public bool Has(InstantiationInfo binding)
         {
-            return _nonLazyBindings.Contains(binding);
+            return _nonLazyInstanceInfos.Contains(binding);
         }
 
-        public void Add(Binding binding)
+        public void Add(InstantiationInfo binding)
         {
-            _nonLazyBindings.Add(binding);
+            _nonLazyInstanceInfos.Add(binding);
         }
 
-        public List<Binding> GetCopy()
+        public List<InstantiationInfo> GetCopy()
         {
-            return new List<Binding>(_nonLazyBindings);
+            return new List<InstantiationInfo>(_nonLazyInstanceInfos);
         }
     }
 }

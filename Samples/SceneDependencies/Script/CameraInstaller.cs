@@ -9,7 +9,7 @@ namespace SBaier.DI.Examples.SceneDependencies
 
 		public override void InstallBindings(Binder binder)
 		{
-			binder.BindSingleInstance(_camera);
+			binder.BindInstance(_camera);
 		}
 	}
 }

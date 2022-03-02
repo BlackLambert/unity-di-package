@@ -2,16 +2,16 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-    public class ToObjectBindingContext<TConcrete> : ToBindingContext<TConcrete> where TConcrete : UnityEngine.Object
+    public class ObjectCreationModeBindingContext<TConcrete> : CreationModeBindingContext<TConcrete> where TConcrete : UnityEngine.Object
     {
-        public ToObjectBindingContext(BindingArguments arguments) : base(arguments) { }
+        public ObjectCreationModeBindingContext(BindingArguments arguments) : base(arguments) { }
 
-        public FromBindingContext FromResources(string path)
+        public ArgumentsBindingContext FromResources(string path)
         {
             ValidateRessource(path);
             _binding.CreationMode = InstanceCreationMode.FromResources;
             _binding.ProvideInstanceFunction = () => Resources.Load<TConcrete>(path);
-            return new FromBindingContext(_arguments);
+            return new ArgumentsBindingContext(_arguments);
         }
 
         private void ValidateRessource(string path)

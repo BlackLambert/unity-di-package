@@ -6,7 +6,7 @@ namespace SBaier.DI
     {
         public BindingsContainer Bindings { get; }
         public SingleInstancesContainer SingleInstances { get; }
-        public NonLazyContainer NonLazyBindings { get; }
+        public NonLazyContainer NonLazyInstanceInfos { get; }
 
         public DIContainers(BindingsContainer bindings,
             SingleInstancesContainer singleInstances,
@@ -14,7 +14,7 @@ namespace SBaier.DI
 		{
             Bindings = bindings;
             SingleInstances = singleInstances;
-            NonLazyBindings = nonLazyBindings;
+            NonLazyInstanceInfos = nonLazyBindings;
         }
 
 		public void AddBinding<TContract>(Binding binding, IComparable iD = null)
@@ -22,9 +22,14 @@ namespace SBaier.DI
             Bindings.AddBinding<TContract>(binding, iD);
         }
 
-		public void AddToNonLazy(Binding binding)
+		public void AddToNonLazy(InstantiationInfo instantiationInfo)
 		{
-            NonLazyBindings.Add(binding);
+            NonLazyInstanceInfos.Add(instantiationInfo);
 		}
+
+		public void RemoveBinding(BindingKey key)
+		{
+            Bindings.Remove(key);
+        }
 	}
 }

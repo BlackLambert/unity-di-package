@@ -5,12 +5,11 @@ namespace SBaier.DI
 {
     public interface Binder
     {
-        public BindingContext<TContract> Bind<TContract>(IComparable iD = default);
-        public FromInstanceBindingContext BindSingleInstance<TContract>(TContract instance, IComparable iD = null);
-        public ToBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default);
+        public ConcreteBindingContext<TContract> Bind<TContract>(IComparable iD = default);
+        public FromInstanceBindingContext BindInstance<TContract>(TContract instance, IComparable iD = null);
+        public CreationModeBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default);
         public FromNewBindingContext<TContract> BindToNewSelf<TContract>(IComparable iD = default) where TContract : new();
-        public ToComponentBindingContext<TContract> BindComponent<TContract>(IComparable iD = default) where TContract : Component;
-        public ToObjectBindingContext<TContract> BindObject<TContract>(IComparable iD = default) where TContract : UnityEngine.Object;
-        public NonResolvableBindingContext CreateNonResolvableInstance();
+        public ComponentCreationModeBindingContext<TContract> BindComponent<TContract>(IComparable iD = default) where TContract : Component;
+        public ObjectCreationModeBindingContext<TContract> BindObject<TContract>(IComparable iD = default) where TContract : UnityEngine.Object;
     }
 }

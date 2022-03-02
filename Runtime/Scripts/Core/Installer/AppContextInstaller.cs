@@ -17,11 +17,11 @@ namespace SBaier.DI
         {
             binder.BindToNewSelf<GameObjectInjector>();
             binder.BindToNewSelf<SceneInjector>();
-            binder.BindSingleInstance(_diContext).WithoutInjection();
+            binder.BindInstance(_diContext).WithoutInjection();
             binder.BindToNewSelf<DIInstanceFactory>();
             binder.BindToSelf<DIContainers>().FromFactory();
             binder.Bind<Factory<DIContainers>>().ToNew<DIContainersFactory>();
-            binder.CreateNonResolvableInstance().OfComponent<LoadedSceneInitializer>().FromNewComponentOn(_contextObject).AsSingle().NonLazy();
+            binder.BindComponent<LoadedSceneInitializer>().FromNewComponentOn(_contextObject).AsNonResolvable();
             binder.BindToNewSelf<SceneContextProvider>().AsSingle();
             binder.Bind<Factory<ChildDIContext, DIContext>>().ToNew<ChildDIContextFactory>();
             new BindingValidationInstaller().InstallBindings(binder);

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace SBaier.DI
 {
-    public class Binding
+    public class Binding : InstantiationInfo
     {
-        public Type ConcreteType;
-        public InstanceCreationMode CreationMode;
-        public InstanceAmountMode AmountMode;
-        public Func<object> ProvideInstanceFunction;
-        public bool InjectionAllowed;
+        public Type ConcreteType { get; set; }
+        public InstanceCreationMode CreationMode { get; set; }
+        public InstanceAmountMode AmountMode { get; set; }
+        public Func<object> ProvideInstanceFunction { get; set; }
+        public bool InjectionAllowed { get; set; }
         public Dictionary<BindingKey, object> Arguments { get; } =
             new Dictionary<BindingKey, object>();
 

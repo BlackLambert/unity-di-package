@@ -5,25 +5,25 @@ namespace  SBaier.DI
 {
     public class DIInstanceFactory
     {
-         public TInstance Create<TInstance>(Resolver resolver, Binding binding)
+         public TInstance Create<TInstance>(Resolver resolver, InstantiationInfo instantiationInfo)
         {
-            switch (binding.CreationMode)
+            switch (instantiationInfo.CreationMode)
             {
                 case InstanceCreationMode.FromNew:
                 case InstanceCreationMode.FromMethod:
                 case InstanceCreationMode.FromInstance:
                 case InstanceCreationMode.FromNewComponentOn:
                 case InstanceCreationMode.FromResources:
-                    return (TInstance) binding.ProvideInstanceFunction();
+                    return (TInstance)instantiationInfo.ProvideInstanceFunction();
                 case InstanceCreationMode.FromFactory:
                     return CreateByFactory<TInstance>(resolver);
                 case InstanceCreationMode.FromPrefabInstance:
-                    return CreatePrefabInstance<TInstance>(binding);
+                    return CreatePrefabInstance<TInstance>(instantiationInfo);
                 case InstanceCreationMode.FromResourcePrefabInstance:
-                    return CreatePrefabInstanceFromRessources<TInstance>(binding);
+                    return CreatePrefabInstanceFromRessources<TInstance>(instantiationInfo);
                 case InstanceCreationMode.Undefined:
                     throw new ArgumentException($"Creation of {typeof(TInstance)} failed. " +
-                        $"Can't create an instance with creation Mode {binding.CreationMode}");
+                        $"Can't create an instance with creation Mode {instantiationInfo.CreationMode}");
                 default:
                     throw new NotImplementedException();
             }
@@ -35,15 +35,15 @@ namespace  SBaier.DI
             return factory.Create();
         }
 
-        private TInstance CreatePrefabInstance<TInstance>(Binding binding)
+        private TInstance CreatePrefabInstance<TInstance>(InstantiationInfo instantiationInfo)
         {
-            GameObject prefab = binding.ProvideInstanceFunction() as GameObject;
+            GameObject prefab = instantiationInfo.ProvideInstanceFunction() as GameObject;
             return CreatePrefabInstance<TInstance>(prefab);
         }
 
-        private TInstance CreatePrefabInstanceFromRessources<TInstance>(Binding binding)
+        private TInstance CreatePrefabInstanceFromRessources<TInstance>(InstantiationInfo instantiationInfo)
         {
-            string path = binding.ProvideInstanceFunction() as string;
+            string path = instantiationInfo.ProvideInstanceFunction() as string;
             return CreatePrefabInstance<TInstance>(Resources.Load<GameObject>(path));
         }
 

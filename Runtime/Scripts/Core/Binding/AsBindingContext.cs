@@ -2,20 +2,20 @@ using System;
 
 namespace SBaier.DI
 {
-    public class AsBindingContext : BindingContextBase
+    public class AsBindingContext : LazyModeBindingContext
     {
         public AsBindingContext(BindingArguments arguments) : base(arguments) { }
 
-		public AsBindingContext WithArgument<TArg>(TArg argument, IComparable iD = default)
+        public LazyModeBindingContext AsSingle()
         {
-            BindingKey key = new BindingKey(typeof(TArg), iD);
-            _arguments.Binding.Arguments.Add(key, argument);
-            return this;
+            _arguments.Binding.AmountMode = InstanceAmountMode.Single;
+            return new LazyModeBindingContext(_arguments);
         }
 
-        public void NonLazy()
-		{
-            _arguments.BindingStorage.AddToNonLazy(_binding);
+        public LazyModeBindingContext PerRequest()
+        {
+            _arguments.Binding.AmountMode = InstanceAmountMode.PerRequest;
+            return new LazyModeBindingContext(_arguments);
         }
     }
 }

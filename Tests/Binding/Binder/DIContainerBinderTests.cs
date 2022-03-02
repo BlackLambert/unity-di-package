@@ -16,7 +16,6 @@ namespace SBaier.DI.Tests
         private Binding _addedBinding = default;
         private IComparable _addedBindingID = default;
         private Type _addedBindingType = default;
-        private NonResolvableBindingContext _nonResolvableContext;
 
 		[SetUp]
         public void Setup()
@@ -30,7 +29,6 @@ namespace SBaier.DI.Tests
             _addedBinding = default;
             _addedBindingID = default;
             _addedBindingType = default;
-            _nonResolvableContext = default;
         }
 
         [Test]
@@ -83,7 +81,6 @@ namespace SBaier.DI.Tests
                 ThenProvideInstanceReturns<Foo>(iD, foo);
                 ThenCreationModeIs(InstanceCreationMode.FromInstance);
                 ThenInstanceAmountModeIs(InstanceAmountMode.Single);
-                ThenInjectionAllowedIs(false);
             }
         }
 
@@ -109,14 +106,6 @@ namespace SBaier.DI.Tests
                 ThenBindingIsAddedToStorage<Sprite>(iD);
                 ThenBoundContractTypeIsConcreteType<Sprite>();
             }
-        }
-
-        [Test]
-        public void CreateNonResolvableInstance_ReturnsValidContext()
-        {
-            GivenANonResolvableSetup();
-            WhenCreateNonResolvableInstanceIsCalled();
-            ThenIsNotNull(_nonResolvableContext);
         }
 
 		private void GivenADefaultSetup<T>()
@@ -166,7 +155,7 @@ namespace SBaier.DI.Tests
 
         private void WhenBindInstanceIsCalled<T>(IComparable iD, T instance)
         {
-            _binder.BindSingleInstance<T>(instance, iD);
+            _binder.BindInstance<T>(instance, iD);
         }
 
         private void WhenBindComponentIsCalled<T>(IComparable iD) where T : Component
@@ -177,11 +166,6 @@ namespace SBaier.DI.Tests
         private void WhenBindObjectIsCalled<T>(IComparable iD) where T : UnityEngine.Object
         {
             _binder.BindObject<T>(iD);
-        }
-
-        private void WhenCreateNonResolvableInstanceIsCalled()
-        {
-            _nonResolvableContext = _binder.CreateNonResolvableInstance();
         }
 
         private void ThenBindingIsAddedToStorage<T>(IComparable iD = default)
@@ -217,16 +201,6 @@ namespace SBaier.DI.Tests
         private void ThenInstanceAmountModeIs(InstanceAmountMode amountMode)
         {
             Assert.AreEqual(amountMode, _addedBinding.AmountMode);
-        }
-
-        private void ThenInjectionAllowedIs(bool allowed)
-        {
-            Assert.AreEqual(allowed, _addedBinding.InjectionAllowed);
-        }
-
-        private void ThenIsNotNull<T>(T instance)
-        {
-            Assert.IsNotNull(instance);
         }
 
         private void OnAddBindingCalled(Type contact, Binding binding, IComparable iD)

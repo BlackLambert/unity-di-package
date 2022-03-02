@@ -1,7 +1,7 @@
 namespace SBaier.DI
 {
 
-	public class FromNewBindingContext<TConcrete> : FromBindingContext where TConcrete : new()
+	public class FromNewBindingContext<TConcrete> : ArgumentsBindingContext where TConcrete : new()
 	{
 		public FromNewBindingContext(BindingArguments arguments) : base(arguments)
 		{

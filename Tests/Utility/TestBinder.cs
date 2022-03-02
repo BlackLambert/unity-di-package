@@ -8,48 +8,41 @@ namespace SBaier.DI.Tests
 	{
 		public List<BindingKey> BoundContracts { get; } = new List<BindingKey>();
 		public List<Binding> Bindings { get; } = new List<Binding>();
-		public List<Binding> NonResolvableBindings { get; } = new List<Binding>();
 
-		BindingContext<TContract> Binder.Bind<TContract>(IComparable iD)
+		ConcreteBindingContext<TContract> Binder.Bind<TContract>(IComparable iD)
 		{
-			return new BindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
+			return new ConcreteBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
 		}
 
-		ToComponentBindingContext<TContract> Binder.BindComponent<TContract>(IComparable iD)
+		ComponentCreationModeBindingContext<TContract> Binder.BindComponent<TContract>(IComparable iD)
 		{
-			return new ToComponentBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
+			return new ComponentCreationModeBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
 		}
 
-		FromInstanceBindingContext Binder.BindSingleInstance<TContract>(TContract instance, IComparable iD)
+		FromInstanceBindingContext Binder.BindInstance<TContract>(TContract instance, IComparable iD)
 		{
-			return new FromInstanceBindingContext(CreateAndInitBindingArguments<TContract>(iD));
+			return new FromInstanceBindingContext(SetupBindingArguments<TContract>(iD));
 		}
 
-		ToObjectBindingContext<TContract> Binder.BindObject<TContract>(IComparable iD) 
+		ObjectCreationModeBindingContext<TContract> Binder.BindObject<TContract>(IComparable iD) 
 		{
-			return new ToObjectBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
+			return new ObjectCreationModeBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
 		}
 
 		FromNewBindingContext<TContract> Binder.BindToNewSelf<TContract>(IComparable iD)
 		{
-			return new FromNewBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
+			return new FromNewBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
 		}
 
-		ToBindingContext<TContract> Binder.BindToSelf<TContract>(IComparable iD)
+		CreationModeBindingContext<TContract> Binder.BindToSelf<TContract>(IComparable iD)
 		{
-			return new ToBindingContext<TContract>(CreateAndInitBindingArguments<TContract>(iD));
-		}
-
-		NonResolvableBindingContext Binder.CreateNonResolvableInstance()
-		{
-			return new NonResolvableBindingContext(CreateAndInitNonResolvableArguments());
+			return new CreationModeBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
 		}
 
 		public void Clear()
 		{
 			BoundContracts.Clear();
 			Bindings.Clear();
-			NonResolvableBindings.Clear();
 		}
 
 		public bool IsBound<TContract>(IComparable iD = null)
@@ -58,18 +51,11 @@ namespace SBaier.DI.Tests
 			return BoundContracts.Contains(key);
 		}
 
-		private BindingArguments CreateAndInitBindingArguments<TContract>(IComparable iD)
+		private BindingArguments SetupBindingArguments<TContract>(IComparable iD)
 		{
 			AddContract<TContract>(iD);
 			BindingArguments args = CreateBindingArguments<TContract>();
 			Bindings.Add(args.Binding);
-			return args;
-		}
-
-		private BindingArguments CreateAndInitNonResolvableArguments()
-		{
-			BindingArguments args = CreateBindingArguments<object>();
-			NonResolvableBindings.Add(args.Binding);
 			return args;
 		}
 
