@@ -3,14 +3,17 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-    public class ConcreteBindingContext<C1> : ConcreteBindingContext<C1, C1, C1, C1, C1, C1, C1, C1>
+    public class ConcreteBindingContext<Contract1> : ConcreteBindingContext<Contract1, Contract1, Contract1, Contract1, Contract1, Contract1, Contract1, Contract1>
     {
-        public ConcreteBindingContext(BindingArguments arguments) : base(arguments) { }
+        public ConcreteBindingContext(IComparable iD, BindingArguments arguments) : base(arguments) 
+        {
+            AddContract<Contract1>(iD);
+        }
 
-        public ConcreteBindingContext<C1, TContract2> And<TContract2>(IComparable iD = default)
+        public ConcreteBindingContext<Contract1, TContract2> And<TContract2>(IComparable iD = default)
 		{
             AddContract<TContract2>(iD);
-            return new ConcreteBindingContext<C1, TContract2>(_arguments);
+            return new ConcreteBindingContext<Contract1, TContract2>(_arguments);
         }
     }
 

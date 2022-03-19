@@ -26,7 +26,7 @@ namespace SBaier.DI
             ValidateInitCall();
             Initialized = true;
             DoInit(baseResolver);
-            InjectIntoInstallers();
+            InjectIntoInstallers(baseResolver);
             InstallBindings(baseResolver);
             DIContext.ValidateBindings();
             DoInjection();
@@ -62,11 +62,11 @@ namespace SBaier.DI
             installer.InstallBindings(_binder);
         }
 
-        private void InjectIntoInstallers()
+        private void InjectIntoInstallers(Resolver resolver)
         {
             List<Installer> installers = GetAllInstallers();
             foreach (Installer installer in installers)
-                (installer as Injectable)?.Inject(_resolver);
+                (installer as Injectable)?.Inject(resolver);
         }
 
         private void ValidateInitCall()

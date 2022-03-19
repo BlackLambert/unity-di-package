@@ -15,10 +15,8 @@ namespace SBaier.DI
         public ConcreteBindingContext<TContract> Bind<TContract>(IComparable iD = default)
         {
             Binding binding = CreateBinding<TContract>();
-            _container.AddBinding<TContract>(binding, iD);
             BindingArguments arguments = new BindingArguments(binding, _container);
-            arguments.Keys.Add(new BindingKey(typeof(TContract), iD));
-            return new ConcreteBindingContext<TContract>(arguments);
+            return new ConcreteBindingContext<TContract>(iD, arguments);
         }
 
         public CreationModeBindingContext<TContract> BindToSelf<TContract>(IComparable iD = default)

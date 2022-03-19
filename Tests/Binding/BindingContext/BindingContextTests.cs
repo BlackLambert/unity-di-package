@@ -71,7 +71,7 @@ namespace SBaier.DI.Tests
 		private ConcreteBindingContext<Foo> GivenANewBindingContext(Binding binding)
 		{
 			BindingArguments arguments = new BindingArguments(binding, new Mock<BindingStorage>().Object);
-			return new ConcreteBindingContext<Foo>(arguments);
+			return new ConcreteBindingContext<Foo>(null, arguments);
 		}
 
 		private void WhenToIsCalled(ConcreteBindingContext<Foo> context)

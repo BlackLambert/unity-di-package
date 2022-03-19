@@ -11,7 +11,7 @@ namespace SBaier.DI.Tests
 
 		ConcreteBindingContext<TContract> Binder.Bind<TContract>(IComparable iD)
 		{
-			return new ConcreteBindingContext<TContract>(SetupBindingArguments<TContract>(iD));
+			return new ConcreteBindingContext<TContract>(iD, SetupBindingArguments<TContract>(iD));
 		}
 
 		ComponentCreationModeBindingContext<TContract> Binder.BindComponent<TContract>(IComparable iD)
