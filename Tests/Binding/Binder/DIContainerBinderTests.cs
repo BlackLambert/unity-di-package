@@ -80,7 +80,6 @@ namespace SBaier.DI.Tests
                 ThenBoundContractTypeIsConcreteType<Foo>();
                 ThenProvideInstanceReturns<Foo>(iD, foo);
                 ThenCreationModeIs(InstanceCreationMode.FromInstance);
-                ThenInstanceAmountModeIs(InstanceAmountMode.Single);
             }
         }
 

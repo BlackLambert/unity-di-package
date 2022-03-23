@@ -48,6 +48,13 @@ namespace SBaier.DI
     {
         public ConcreteBindingContext(BindingArguments arguments) : base(arguments) { }
 
+        public FromInstanceBindingContext ToInstance<TConcrete>(TConcrete instance) where TConcrete : C1, C2, C3, C4, C5, C6, C7, C8
+		{
+            _binding.CreationMode = InstanceCreationMode.FromInstance;
+            _binding.ProvideInstanceFunction = () => instance;
+            return new FromInstanceBindingContext(_arguments);
+        }
+
         public CreationModeBindingContext<TConcrete> To<TConcrete>() where TConcrete : C1, C2, C3, C4, C5, C6, C7, C8
         {
             return new CreationModeBindingContext<TConcrete>(_arguments);
