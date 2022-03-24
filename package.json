@@ -6,7 +6,7 @@
   "unity": "2021.2",
   "unityRelease": "",
   "documentationUrl": "https://github.com/BlackLambert/unity-di-package",
-  "changelogUrl": "",
+  "changelogUrl": "https://github.com/BlackLambert/unity-di-package/releases/tag/v1.2.0",
   "licensesUrl": "",
   "dependencies": {
     "nuget.moq": "1.0.0"
