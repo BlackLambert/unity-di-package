@@ -17,7 +17,7 @@ namespace SBaier.DI
         {
             binder.BindInstance(_contextObject.scene);
             binder.BindInstance(_diContext).WithoutInjection();
-            binder.Bind<Factory<ChildDIContext, DIContext>>().ToNew<ChildDIContextFactory>();
+            binder.Bind<Factory<ChildDIContext, Resolver>>().ToNew<ChildDIContextFactory>();
         }
     }
 }

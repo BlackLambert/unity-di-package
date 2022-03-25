@@ -1,11 +1,11 @@
 namespace SBaier.DI
 {
-    public class ChildDIContextFactory : Factory<ChildDIContext, DIContext>
+    public class ChildDIContextFactory : Factory<ChildDIContext, Resolver>
     {
-        public ChildDIContext Create(DIContext parent)
+        public ChildDIContext Create(Resolver parentResolver)
         {
             ChildDIContext result = new ChildDIContext();
-            (result as Injectable).Inject(parent.GetResolver());
+            (result as Injectable).Inject(parentResolver);
             return result;
         }
     }

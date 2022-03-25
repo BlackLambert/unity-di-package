@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace SBaier.DI
@@ -9,14 +10,25 @@ namespace SBaier.DI
         protected override DIContext DIContext => _currentContext;
         
         protected override void DoInit(Resolver resolver)
-        {
-            _injector = resolver.Resolve<GameObjectInjector>();
-            DIContext parentContext = resolver.Resolve<DIContext>();
-            Factory<ChildDIContext, DIContext> contextFactory = resolver.Resolve<Factory<ChildDIContext, DIContext>>();
-            _currentContext = contextFactory.Create(parentContext);
+		{
+			_injector = resolver.Resolve<GameObjectInjector>();
+            _currentContext = CreateDIContext(resolver);
+			InstallGameObjectContextBindings();
+		}
+
+		private ChildDIContext CreateDIContext(Resolver resolver)
+		{
+			Factory<ChildDIContext, Resolver> contextFactory = resolver.Resolve<Factory<ChildDIContext, Resolver>>();
+			return contextFactory.Create(resolver);
+		}
+
+		private void InstallGameObjectContextBindings()
+		{
+            GameObjectContextInstaller installer = new GameObjectContextInstaller(_currentContext);
+            installer.InstallBindings(_binder);
         }
 
-        protected override void DoInjection()
+		protected override void DoInjection()
         {
             Debug.Log($"{name} injecting into hierarchy");
             _injector.InjectIntoHierarchy(transform, DIContext.GetResolver());

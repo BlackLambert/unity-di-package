@@ -46,9 +46,9 @@ namespace SBaier.DI
 
         private ChildDIContext CreateDIContext(Resolver resolver)
 		{
-            Factory<ChildDIContext, DIContext> contextFactory = resolver.Resolve<Factory<ChildDIContext, DIContext>>();
+            Factory<ChildDIContext, Resolver> contextFactory = resolver.Resolve<Factory<ChildDIContext, Resolver>>();
             DIContext parent = GetParentContext(resolver);
-            return contextFactory.Create(parent);
+            return contextFactory.Create(parent.GetResolver());
         }
 
         private DIContext GetParentContext(Resolver resolver)

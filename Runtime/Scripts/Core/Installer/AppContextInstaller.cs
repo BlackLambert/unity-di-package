@@ -23,7 +23,7 @@ namespace SBaier.DI
             binder.Bind<Factory<DIContainers>>().ToNew<DIContainersFactory>();
             binder.BindComponent<LoadedSceneInitializer>().FromNewComponentOn(_contextObject).AsNonResolvable();
             binder.BindToNewSelf<SceneContextProvider>().AsSingle();
-            binder.Bind<Factory<ChildDIContext, DIContext>>().ToNew<ChildDIContextFactory>();
+            binder.Bind<Factory<ChildDIContext, Resolver>>().ToNew<ChildDIContextFactory>();
             new BindingValidationInstaller().InstallBindings(binder);
             new QuitDetectorInstaller(_contextObject).InstallBindings(binder);
         }
