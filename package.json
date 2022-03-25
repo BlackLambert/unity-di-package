@@ -1,12 +1,12 @@
 {
   "name": "com.sbaier.unitydi",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "displayName": "Unity Dependency Injection",
   "description": "A lightweight dependency injection framework for the Unity Engine.",
   "unity": "2021.2",
   "unityRelease": "",
   "documentationUrl": "https://github.com/BlackLambert/unity-di-package",
-  "changelogUrl": "",
+  "changelogUrl": "https://github.com/BlackLambert/unity-di-package/releases/tag/v1.2.1",
   "licensesUrl": "",
   "dependencies": {
     "nuget.moq": "1.0.0"
