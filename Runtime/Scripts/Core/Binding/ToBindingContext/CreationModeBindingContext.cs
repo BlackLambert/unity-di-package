@@ -15,13 +15,14 @@ namespace SBaier.DI
         }
         
         public FromInstanceBindingContext FromInstance(TConcrete instance)
-        {
-            _binding.CreationMode = InstanceCreationMode.FromInstance;
-            _binding.ProvideInstanceFunction = () => instance;
-            return new FromInstanceBindingContext(_arguments);
-        }
+		{
+			ValidateInstance(instance);
+			_binding.CreationMode = InstanceCreationMode.FromInstance;
+			_binding.ProvideInstanceFunction = () => instance;
+			return new FromInstanceBindingContext(_arguments);
+		}
 
-        public ArgumentsBindingContext FromMethod(Func<TConcrete> create)
+		public ArgumentsBindingContext FromMethod(Func<TConcrete> create)
         {
             _binding.CreationMode = InstanceCreationMode.FromMethod;
             _binding.ProvideInstanceFunction = () => create();
@@ -32,6 +33,12 @@ namespace SBaier.DI
         {
             _binding.CreationMode = InstanceCreationMode.FromFactory;
             return new ArgumentsBindingContext(_arguments);
+        }
+
+        private void ValidateInstance(TConcrete instance)
+        {
+            if (instance.Equals(null))
+                throw new ArgumentNullException();
         }
     }
 }

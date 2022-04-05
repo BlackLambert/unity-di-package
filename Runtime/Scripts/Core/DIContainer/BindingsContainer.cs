@@ -41,7 +41,12 @@ namespace SBaier.DI
             _bindings.Remove(key);
         }
 
-        public bool HasBinding(BindingKey key)
+		internal void Clear()
+		{
+            _bindings.Clear();
+        }
+
+		public bool HasBinding(BindingKey key)
         {
             return _bindings.ContainsKey(key);
         }

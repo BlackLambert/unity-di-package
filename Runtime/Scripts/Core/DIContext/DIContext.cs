@@ -7,5 +7,6 @@
         Resolver GetResolver();
 		Binder GetBinder();
         TContract GetInstance<TContract>(Binding binding);
-    }
+		void Reset();
+	}
 }

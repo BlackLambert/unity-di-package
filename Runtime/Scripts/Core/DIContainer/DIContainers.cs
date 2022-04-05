@@ -31,5 +31,12 @@ namespace SBaier.DI
 		{
             Bindings.Remove(key);
         }
+
+		public void Reset()
+		{
+            Bindings.Clear();
+            SingleInstances.Clear();
+            NonLazyInstanceInfos.Clear();
+        }
 	}
 }

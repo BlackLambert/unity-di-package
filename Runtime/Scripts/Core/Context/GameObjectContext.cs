@@ -30,7 +30,6 @@ namespace SBaier.DI
 
 		protected override void DoInjection()
         {
-            Debug.Log($"{name} injecting into hierarchy");
             _injector.InjectIntoHierarchy(transform, DIContext.GetResolver());
         }
 

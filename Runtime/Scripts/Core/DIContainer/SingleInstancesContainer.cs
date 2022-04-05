@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SBaier.DI
@@ -34,5 +35,10 @@ namespace SBaier.DI
             if (Has(key))
                 throw new MissingSingleInstanceException();
         }
-    }
+
+		internal void Clear()
+		{
+            _singleInstances.Clear();
+        }
+	}
 }

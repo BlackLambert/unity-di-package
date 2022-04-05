@@ -34,6 +34,11 @@ namespace SBaier.DI
             _gameObjectInjector = resolver.Resolve<GameObjectInjector>();
         }
 
+        void DIContext.Reset()
+        {
+            _container.Reset();
+        }
+
         public void ValidateBindings()
 		{
             List<InstantiationInfo> instantiationInfo = _bindings.GetInstantiationInfos().ToList();
@@ -147,6 +152,6 @@ namespace SBaier.DI
         }
 
         protected abstract Resolver CreateResolver(BindingsContainer container, DIContext diContext);
-    }
+	}
 }
 
