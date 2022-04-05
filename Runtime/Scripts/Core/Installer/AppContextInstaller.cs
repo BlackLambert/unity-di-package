@@ -16,7 +16,6 @@ namespace SBaier.DI
         public void InstallBindings(Binder binder)
         {
             binder.BindToNewSelf<GameObjectInjector>();
-            binder.BindToNewSelf<GameObjectDeactivator>();
             binder.BindToNewSelf<SceneInjector>();
             binder.BindInstance(_diContext).WithoutInjection();
             binder.BindToNewSelf<DIInstanceFactory>();

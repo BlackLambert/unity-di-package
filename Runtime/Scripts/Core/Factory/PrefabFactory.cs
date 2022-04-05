@@ -13,14 +13,12 @@ namespace SBaier.DI
 			_injector = resolver.Resolve<GameObjectInjector>();
 			_prefab = resolver.Resolve<TPrefab>();
 			BaseResolver = resolver;
-			_prefab.gameObject.SetActive(false);
 		}
 
 		protected TPrefab CreateInstance(Resolver resolver)
 		{
 			TPrefab instance = GameObject.Instantiate(_prefab);
 			_injector.InjectIntoContextHierarchy(instance.transform, resolver);
-			instance.gameObject.SetActive(true);
 			return instance;
 		}
 	}

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace SBaier.DI
@@ -27,10 +26,5 @@ namespace SBaier.DI
         {
             return new List<InstantiationInfo>(_nonLazyInstanceInfos);
         }
-
-		internal void Clear()
-		{
-            _nonLazyInstanceInfos.Clear();
-        }
-	}
+    }
 }

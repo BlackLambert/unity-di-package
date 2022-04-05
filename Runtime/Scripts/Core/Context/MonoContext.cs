@@ -33,13 +33,7 @@ namespace SBaier.DI
             DIContext.CreateNonLazyInstances();
         }
 
-        void Context.Reset()
-        {
-            Initialized = false;
-            DIContext.Reset();
-        }
-
-        public void AddInstaller(Installer installer)
+		public void AddInstaller(Installer installer)
         {
             _installers.Add(installer);
         }
@@ -82,6 +76,6 @@ namespace SBaier.DI
         }
 
         protected abstract ContextAlreadyInitializedException CreateContextAlreadyInitializedException();
-	}
+    }
 }
 
