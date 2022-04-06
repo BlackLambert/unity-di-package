@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
+    [DisallowMultipleComponent]
+    [DefaultExecutionOrder(-10000)]
     public class AppContext : MonoContext
     {
         private BasicDIContext _dIContext;
