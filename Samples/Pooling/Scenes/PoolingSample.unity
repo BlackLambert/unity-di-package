@@ -216,7 +216,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1216977170}
-  - {fileID: 1155671199}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -585,42 +584,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1120501291}
   m_CullTransparentMesh: 1
---- !u!1 &1155671198
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1155671199}
-  m_Layer: 5
-  m_Name: PoolHook
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1155671199
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155671198}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 283902697}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1202959604
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,10 +1080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25dd83f84051e8a428cae0be049a9f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _camera: {fileID: 1671547607}
   _fooPrefab: {fileID: 7810564930570215525, guid: b64e98e57aa8cb64fa4f4b6f70a2998e, type: 3}
-  _barPrefab: {fileID: 2720492515619379459, guid: 0555604cfd6a10945ba31850a37cd28c, type: 3}
-  _poolHook: {fileID: 1155671199}
 --- !u!114 &2131191251
 MonoBehaviour:
   m_ObjectHideFlags: 0

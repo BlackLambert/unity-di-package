@@ -6,19 +6,22 @@ namespace SBaier.DI
 	{
 		private GameObjectInjector _injector;
 		private TPrefab _prefab;
+		private bool _initialPrefabActiveState;
 		protected Resolver BaseResolver { get; private set; } 
 
 		public virtual void Inject(Resolver resolver)
 		{
 			_injector = resolver.Resolve<GameObjectInjector>();
 			_prefab = resolver.Resolve<TPrefab>();
+			_initialPrefabActiveState = _prefab.gameObject.activeSelf;
 			BaseResolver = resolver;
-			_prefab.gameObject.SetActive(false);
 		}
 
 		protected TPrefab CreateInstance(Resolver resolver)
 		{
+			_prefab.gameObject.SetActive(false);
 			TPrefab instance = GameObject.Instantiate(_prefab);
+			_prefab.gameObject.SetActive(_initialPrefabActiveState);
 			_injector.InjectIntoContextHierarchy(instance.transform, resolver);
 			instance.gameObject.SetActive(true);
 			return instance;

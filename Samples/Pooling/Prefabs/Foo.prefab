@@ -483,7 +483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8974388631210051247
 RectTransform:
   m_ObjectHideFlags: 0
@@ -585,6 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _foo: {fileID: 7810564930570215525}
+  _barPrefab: {fileID: 2720492515619379459, guid: 0555604cfd6a10945ba31850a37cd28c, type: 3}
 --- !u!114 &2228329128596639526
 MonoBehaviour:
   m_ObjectHideFlags: 0

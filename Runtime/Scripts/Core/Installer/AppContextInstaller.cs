@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SBaier.DI
 {
@@ -25,8 +26,21 @@ namespace SBaier.DI
             binder.BindComponent<LoadedSceneInitializer>().FromNewComponentOn(_contextObject).AsNonResolvable();
             binder.BindToNewSelf<SceneContextProvider>().AsSingle();
             binder.Bind<Factory<ChildDIContext, Resolver>>().ToNew<ChildDIContextFactory>();
+            binder.BindToSelf<MonoPoolCache>().FromMethod(CreatePoolCache).AsSingle();
             new BindingValidationInstaller().InstallBindings(binder);
             new QuitDetectorInstaller(_contextObject).InstallBindings(binder);
         }
-    }
+
+		private MonoPoolCache CreatePoolCache()
+		{
+            GameObject cacheObject = new GameObject(nameof(MonoPoolCache));
+            GameObject uiCacheObject = new GameObject("UI Cache");
+            Canvas canvas = uiCacheObject.AddComponent<Canvas>();
+            uiCacheObject.AddComponent<CanvasScaler>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            uiCacheObject.transform.SetParent(cacheObject.transform);
+            cacheObject.transform.SetParent(_contextObject.transform);
+            return cacheObject.AddComponent<MonoPoolCache>();
+        }
+	}
 }
