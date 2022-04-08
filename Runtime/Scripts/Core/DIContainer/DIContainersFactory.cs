@@ -7,7 +7,9 @@ namespace SBaier.DI
             return new DIContainers(
                 new BindingsContainer(),
                 new SingleInstancesContainer(),
-                new NonLazyContainer());
+                new NonLazyContainer(),
+                new DisposablesContainer(),
+                new ObjectsContainer());
         }
     } 
 }

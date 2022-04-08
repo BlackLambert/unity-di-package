@@ -18,6 +18,8 @@ namespace SBaier.DI
         private BindingsContainer _bindings => _container.Bindings;
         private NonLazyContainer _nonLazyBindings => _container.NonLazyInstanceInfos;
         private SingleInstancesContainer _singleInstances => _container.SingleInstances;
+        private DisposablesContainer _disposables => _container.DisposablesContainer;
+        private ObjectsContainer _objects => _container.ObjectsContainer;
 
         void Injectable.Inject(Resolver resolver)
         {
@@ -36,10 +38,11 @@ namespace SBaier.DI
 
         void DIContext.Reset()
         {
+            DestroyInstances();
             _container.Reset();
         }
 
-        public void ValidateBindings()
+		public void ValidateBindings()
 		{
             List<InstantiationInfo> instantiationInfo = _bindings.GetInstantiationInfos().ToList();
             instantiationInfo.AddRange(_nonLazyBindings.GetCopy());
@@ -93,7 +96,36 @@ namespace SBaier.DI
         {
             TContract instance = _instanceFactory.Create<TContract>(GetResolver(), instantiationInfo);
             TryInjection(instance, instantiationInfo);
+            TryAddDisposables(instance, instantiationInfo);
             return instance;
+        }
+
+		private void TryAddDisposables<TContract>(TContract instance, InstantiationInfo instantiationInfo)
+		{
+            if (instantiationInfo.CreationMode == InstanceCreationMode.FromInstance)
+                return;
+			TryAddDisposable(instance as IDisposable);
+            TryAddObject(instance as UnityEngine.Object);
+        }
+
+		private void TryAddDisposable(IDisposable disposable)
+		{
+            if (disposable == null)
+                return;
+            _disposables.Add(disposable);
+        }
+
+        private void TryAddObject(UnityEngine.Object obj)
+        {
+            if (obj == null)
+                return;
+            _objects.Add(obj);
+        }
+
+        private void DestroyInstances()
+        {
+            _disposables.Dispose();
+            _objects.Destroy();
         }
 
         private void CreateNonLazyInstance(InstantiationInfo instantiationInfo)

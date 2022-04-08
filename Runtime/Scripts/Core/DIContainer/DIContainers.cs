@@ -7,14 +7,20 @@ namespace SBaier.DI
         public BindingsContainer Bindings { get; }
         public SingleInstancesContainer SingleInstances { get; }
         public NonLazyContainer NonLazyInstanceInfos { get; }
+        public DisposablesContainer DisposablesContainer { get; }
+        public ObjectsContainer ObjectsContainer { get; }
 
         public DIContainers(BindingsContainer bindings,
             SingleInstancesContainer singleInstances,
-            NonLazyContainer nonLazyBindings)
+            NonLazyContainer nonLazyBindings,
+            DisposablesContainer disposablesContainer,
+            ObjectsContainer objectsContainer)
 		{
             Bindings = bindings;
             SingleInstances = singleInstances;
             NonLazyInstanceInfos = nonLazyBindings;
+            DisposablesContainer = disposablesContainer;
+            ObjectsContainer = objectsContainer;
         }
 
 		public void AddBinding<TContract>(Binding binding, IComparable iD = null)
@@ -37,6 +43,8 @@ namespace SBaier.DI
             Bindings.Clear();
             SingleInstances.Clear();
             NonLazyInstanceInfos.Clear();
+            DisposablesContainer.Clear();
+			ObjectsContainer.Clear();
         }
 	}
 }

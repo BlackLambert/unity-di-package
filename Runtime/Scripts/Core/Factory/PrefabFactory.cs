@@ -1,27 +1,32 @@
+using System;
 using UnityEngine;
 
 namespace SBaier.DI
 {
-	public abstract class PrefabFactoryBase<TPrefab> : Injectable where TPrefab : Component
+	public abstract class PrefabFactoryBase<TPrefab> : Injectable, IDisposable where TPrefab : Component
 	{
 		private GameObjectInjector _injector;
 		private TPrefab _prefab;
 		private bool _initialPrefabActiveState;
-		protected Resolver BaseResolver { get; private set; } 
+		protected Resolver BaseResolver { get; private set; }
 
 		public virtual void Inject(Resolver resolver)
 		{
 			_injector = resolver.Resolve<GameObjectInjector>();
 			_prefab = resolver.Resolve<TPrefab>();
 			_initialPrefabActiveState = _prefab.gameObject.activeSelf;
+			_prefab.gameObject.SetActive(false);
 			BaseResolver = resolver;
+		}
+
+		public void Dispose()
+		{
+			_prefab.gameObject.SetActive(_initialPrefabActiveState);
 		}
 
 		protected TPrefab CreateInstance(Resolver resolver)
 		{
-			_prefab.gameObject.SetActive(false);
 			TPrefab instance = GameObject.Instantiate(_prefab);
-			_prefab.gameObject.SetActive(_initialPrefabActiveState);
 			_injector.InjectIntoContextHierarchy(instance.transform, resolver);
 			instance.gameObject.SetActive(true);
 			return instance;

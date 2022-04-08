@@ -25,7 +25,12 @@ namespace SBaier.DI
             (validator as Injectable).Inject(CreateBindingValidatorResolver());
             result.Add(validator);
             result.Add(new GameObjectInjector());
-            result.Add(new DIContainers(new BindingsContainer(), new SingleInstancesContainer(), new NonLazyContainer()));
+            result.Add(new DIContainers(
+                new BindingsContainer(), 
+                new SingleInstancesContainer(), 
+                new NonLazyContainer(), 
+                new DisposablesContainer(), 
+                new ObjectsContainer()));
             result.Add(new DIInstanceFactory());
             return result;
         }
