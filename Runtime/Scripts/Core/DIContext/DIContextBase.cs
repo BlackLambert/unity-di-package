@@ -20,6 +20,7 @@ namespace SBaier.DI
         private SingleInstancesContainer _singleInstances => _container.SingleInstances;
         private DisposablesContainer _disposables => _container.DisposablesContainer;
         private ObjectsContainer _objects => _container.ObjectsContainer;
+        private GameObjectsContainer _gameObjects => _container.GameObjectsContainer;
 
         void Injectable.Inject(Resolver resolver)
         {
@@ -105,7 +106,8 @@ namespace SBaier.DI
             if (instantiationInfo.CreationMode == InstanceCreationMode.FromInstance)
                 return;
 			TryAddDisposable(instance as IDisposable);
-            TryAddObject(instance as UnityEngine.Object);
+            if(!TryAddGameObject((instance as Component)?.gameObject, instantiationInfo))
+                TryAddObject(instance as UnityEngine.Object, instantiationInfo);
         }
 
 		private void TryAddDisposable(IDisposable disposable)
@@ -115,7 +117,22 @@ namespace SBaier.DI
             _disposables.Add(disposable);
         }
 
-        private void TryAddObject(UnityEngine.Object obj)
+        private bool TryAddGameObject(GameObject gameObject, InstantiationInfo instantiationInfo)
+        {
+            if (gameObject == null)
+                return false;
+            switch (instantiationInfo.CreationMode)
+            {
+                case InstanceCreationMode.FromPrefabInstance:
+                case InstanceCreationMode.FromResourcePrefabInstance:
+                case InstanceCreationMode.FromMethod:
+                    _gameObjects.Add(gameObject);
+                    return true;
+            }
+            return false;
+        }
+
+        private void TryAddObject(UnityEngine.Object obj, InstantiationInfo instantiationInfo)
         {
             if (obj == null)
                 return;

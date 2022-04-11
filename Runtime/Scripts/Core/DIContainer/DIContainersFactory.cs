@@ -1,7 +1,14 @@
 namespace SBaier.DI
 {
-    public class DIContainersFactory : Factory<DIContainers>
+    public class DIContainersFactory : Factory<DIContainers>, Injectable
     {
+        private GameObjectDeactivator _deactivator;
+
+        public void Inject(Resolver resolver)
+        {
+            _deactivator = resolver.Resolve<GameObjectDeactivator>();
+        }
+
         public DIContainers Create()
         {
             return new DIContainers(
@@ -9,8 +16,9 @@ namespace SBaier.DI
                 new SingleInstancesContainer(),
                 new NonLazyContainer(),
                 new DisposablesContainer(),
-                new ObjectsContainer());
+                new ObjectsContainer(),
+                new GameObjectsContainer(_deactivator));
         }
-    } 
+	} 
 }
 

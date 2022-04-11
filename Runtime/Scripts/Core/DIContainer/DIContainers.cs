@@ -9,18 +9,21 @@ namespace SBaier.DI
         public NonLazyContainer NonLazyInstanceInfos { get; }
         public DisposablesContainer DisposablesContainer { get; }
         public ObjectsContainer ObjectsContainer { get; }
+		internal GameObjectsContainer GameObjectsContainer { get; }
 
-        public DIContainers(BindingsContainer bindings,
+		public DIContainers(BindingsContainer bindings,
             SingleInstancesContainer singleInstances,
             NonLazyContainer nonLazyBindings,
             DisposablesContainer disposablesContainer,
-            ObjectsContainer objectsContainer)
+            ObjectsContainer objectsContainer,
+            GameObjectsContainer gameObjectsContainer)
 		{
             Bindings = bindings;
             SingleInstances = singleInstances;
             NonLazyInstanceInfos = nonLazyBindings;
             DisposablesContainer = disposablesContainer;
             ObjectsContainer = objectsContainer;
+            GameObjectsContainer = gameObjectsContainer;
         }
 
 		public void AddBinding<TContract>(Binding binding, IComparable iD = null)
@@ -45,6 +48,7 @@ namespace SBaier.DI
             NonLazyInstanceInfos.Clear();
             DisposablesContainer.Clear();
 			ObjectsContainer.Clear();
+            GameObjectsContainer.Clear();
         }
 	}
 }

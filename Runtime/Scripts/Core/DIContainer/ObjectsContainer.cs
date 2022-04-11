@@ -6,17 +6,17 @@ namespace SBaier.DI
     {
         private HashSet<UnityEngine.Object> _objects = new HashSet<UnityEngine.Object>();
 
-        public void Add(UnityEngine.Object binding)
+        public void Add(UnityEngine.Object obj)
         {
-            _objects.Add(binding);
+            _objects.Add(obj);
         }
 
-        internal void Clear()
+        public void Clear()
         {
             _objects.Clear();
         }
 
-		internal void Destroy()
+		public void Destroy()
         {
             foreach (UnityEngine.Object obj in _objects)
                 UnityEngine.Object.Destroy(obj);
