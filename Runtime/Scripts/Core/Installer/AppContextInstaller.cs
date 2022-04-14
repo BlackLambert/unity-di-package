@@ -17,16 +17,16 @@ namespace SBaier.DI
         public void InstallBindings(Binder binder)
         {
             binder.BindToNewSelf<GameObjectInjector>();
-            binder.BindToNewSelf<GameObjectDeactivator>();
+            binder.BindToNewSelf<GameObjectContextsReseter>();
             binder.BindToNewSelf<SceneInjector>();
             binder.BindInstance(_diContext).WithoutInjection();
             binder.BindToNewSelf<DIInstanceFactory>();
             binder.BindToSelf<DIContainers>().FromFactory();
             binder.Bind<Factory<DIContainers>>().ToNew<DIContainersFactory>();
-            binder.BindComponent<LoadedSceneInitializer>().FromNewComponentOn(_contextObject).AsNonResolvable();
             binder.BindToNewSelf<SceneContextProvider>().AsSingle();
             binder.Bind<Factory<ChildDIContext, Resolver>>().ToNew<ChildDIContextFactory>();
             binder.BindToSelf<MonoPoolCache>().FromMethod(CreatePoolCache).AsSingle();
+            binder.BindToNewSelf<SceneObjectsDisabler>();
             new BindingValidationInstaller().InstallBindings(binder);
             new QuitDetectorInstaller(_contextObject).InstallBindings(binder);
         }

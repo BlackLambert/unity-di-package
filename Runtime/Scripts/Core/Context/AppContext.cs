@@ -8,6 +8,7 @@ namespace SBaier.DI
     {
         private BasicDIContext _dIContext;
         protected override DIContext DIContext => _dIContext;
+        private SceneContextProvider _sceneContextProvider;
 
         private void Awake()
         {
@@ -18,22 +19,23 @@ namespace SBaier.DI
         protected override void DoInit(Resolver resolver)
         {
             _dIContext = resolver.Resolve<BasicDIContext>();
-            InstallSceneContextBindings();
+            InstallAppContextBindings();
             DIContext.ValidateBindings();
+            _sceneContextProvider = _resolver.Resolve<SceneContextProvider>();
         }
 
-        private void InstallSceneContextBindings()
+        private void InstallAppContextBindings()
         {
             AppContextInstaller installer = new AppContextInstaller(_dIContext, gameObject);
             installer.InstallBindings(_binder);
         }
 
-		protected override void DoInjection()
-		{
-            SceneContext sceneContext = FindObjectOfType<SceneContext>();
-            if (sceneContext == null)
-                throw new MissingSceneContextException();
-            sceneContext.Init(_resolver);
+        protected override void DoInjection() { }
+
+        public Resolver GetResolverFor(SceneContext sceneContext)
+        {
+            string parentID = sceneContext.ParentContextID;
+            return string.IsNullOrEmpty(parentID) ? _resolver : _sceneContextProvider.Get(parentID).GetResolver();
         }
 
 		protected override ContextAlreadyInitializedException CreateContextAlreadyInitializedException()

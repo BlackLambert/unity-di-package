@@ -4,6 +4,7 @@ namespace SBaier.DI
     {
         public void Init(Resolver baseResolver);
         public void Reset();
+        public Resolver GetResolver();
     }
 }
 

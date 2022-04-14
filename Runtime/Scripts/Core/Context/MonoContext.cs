@@ -44,6 +44,11 @@ namespace SBaier.DI
             _installers.Add(installer);
         }
 
+        public Resolver GetResolver()
+        {
+            return _resolver;
+        }
+
         protected abstract void DoInit(Resolver resolver);
 
         protected abstract void DoInjection();
@@ -82,6 +87,6 @@ namespace SBaier.DI
         }
 
         protected abstract ContextAlreadyInitializedException CreateContextAlreadyInitializedException();
-	}
+    }
 }
 

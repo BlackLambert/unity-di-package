@@ -2,11 +2,11 @@ namespace SBaier.DI
 {
     public class DIContainersFactory : Factory<DIContainers>, Injectable
     {
-        private GameObjectDeactivator _deactivator;
+        private GameObjectContextsReseter _deactivator;
 
         public void Inject(Resolver resolver)
         {
-            _deactivator = resolver.Resolve<GameObjectDeactivator>();
+            _deactivator = resolver.Resolve<GameObjectContextsReseter>();
         }
 
         public DIContainers Create()

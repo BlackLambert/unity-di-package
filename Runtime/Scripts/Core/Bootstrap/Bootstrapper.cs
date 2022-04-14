@@ -22,7 +22,7 @@ namespace SBaier.DI
 		{
             BasicInstanceResolver result = new BasicInstanceResolver();
             InstantiationInfoValidator validator = new InstantiationInfoValidator();
-            GameObjectDeactivator deactivator = new GameObjectDeactivator();
+            GameObjectContextsReseter contextReseter = new GameObjectContextsReseter();
             (validator as Injectable).Inject(CreateBindingValidatorResolver());
             result.Add(validator);
             result.Add(new GameObjectInjector());
@@ -32,7 +32,7 @@ namespace SBaier.DI
                 new NonLazyContainer(), 
                 new DisposablesContainer(), 
                 new ObjectsContainer(),
-                new GameObjectsContainer(deactivator)));
+                new GameObjectsContainer(contextReseter)));
             result.Add(new DIInstanceFactory());
             return result;
         }

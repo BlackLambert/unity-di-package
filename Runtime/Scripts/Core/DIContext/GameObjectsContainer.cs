@@ -6,11 +6,11 @@ namespace SBaier.DI
 	public class GameObjectsContainer
 	{
         private HashSet<GameObject> _objects = new HashSet<GameObject>();
-        private GameObjectDeactivator _deactivator;
+        private GameObjectContextsReseter _reseter;
 
-        public GameObjectsContainer(GameObjectDeactivator deactivator)
+        public GameObjectsContainer(GameObjectContextsReseter reseter)
 		{
-            _deactivator = deactivator;
+            _reseter = reseter;
         }
 
         public void Add(GameObject gameObject)
@@ -31,7 +31,7 @@ namespace SBaier.DI
 
 		private void Destroy(GameObject gameObject)
 		{
-            _deactivator.Deactivate(gameObject.transform);
+            _reseter.Reset(gameObject);
             UnityEngine.Object.Destroy(gameObject);
 		}
 	}

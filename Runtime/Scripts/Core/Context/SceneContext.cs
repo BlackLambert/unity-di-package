@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 namespace SBaier.DI
 {
+    [DisallowMultipleComponent]
+    [DefaultExecutionOrder(-9999)]
     public class SceneContext : MonoContext
     {
         private ChildDIContext _dIContext;
@@ -16,10 +18,17 @@ namespace SBaier.DI
         private SceneInjector _injector;
         private Scene _scene;
         private SceneContextProvider _sceneContextProvider;
+        private SceneObjectsDisabler _sceneDisabler;
 
         public string ID => _iD;
         public string ParentContextID => _parentContextID;
 
+        private void Awake()
+        {
+            AppContext appContext = FindOrCreateAppContext();
+            Resolver parentResolver = appContext.GetResolverFor(this);
+            Init(parentResolver);
+        }
 
         protected override void DoInit(Resolver resolver)
 		{
@@ -32,6 +41,11 @@ namespace SBaier.DI
         private void OnDestroy()
         {
             RemoveFromProvider();
+        }
+
+        private void OnApplicationQuit()
+        {
+            DisableSceneObjects();
         }
 
         private void AddToProvider()
@@ -47,16 +61,7 @@ namespace SBaier.DI
         private ChildDIContext CreateDIContext(Resolver resolver)
 		{
             Factory<ChildDIContext, Resolver> contextFactory = resolver.Resolve<Factory<ChildDIContext, Resolver>>();
-            DIContext parent = GetParentContext(resolver);
-            return contextFactory.Create(parent.GetResolver());
-        }
-
-        private DIContext GetParentContext(Resolver resolver)
-		{
-            if (string.IsNullOrEmpty(_parentContextID))
-                return resolver.Resolve<DIContext>();
-            else
-                return resolver.Resolve<SceneContextProvider>().Get(_parentContextID).DIContext;
+            return contextFactory.Create(resolver);
         }
 
 		private void InstallSceneContextBindings()
@@ -70,6 +75,7 @@ namespace SBaier.DI
             _injector = _resolver.Resolve<SceneInjector>();
             _scene = _resolver.Resolve<Scene>();
             _sceneContextProvider = _resolver.Resolve<SceneContextProvider>();
+            _sceneDisabler = _resolver.Resolve<SceneObjectsDisabler>();
         }
 
         protected override void DoInjection()
@@ -80,6 +86,25 @@ namespace SBaier.DI
         protected override ContextAlreadyInitializedException CreateContextAlreadyInitializedException()
         {
             return new SceneContextAlreadyInitializedException(name);
+        }
+
+        private AppContext FindOrCreateAppContext()
+        {
+            AppContext appContext = FindObjectOfType<AppContext>();
+            if (appContext == null)
+                appContext = CreateAppContext();
+            return appContext;
+        }
+
+        private AppContext CreateAppContext()
+        {
+            GameObject appContextObject = new GameObject(nameof(AppContext));
+            return appContextObject.AddComponent<AppContext>();
+        }
+
+        private void DisableSceneObjects()
+        {
+            _sceneDisabler.DisableObjectsOf(_scene);
         }
     }
 }
