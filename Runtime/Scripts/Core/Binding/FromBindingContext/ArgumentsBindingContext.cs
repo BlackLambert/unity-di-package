@@ -15,9 +15,19 @@ namespace SBaier.DI
 
         public void AsNonResolvable()
 		{
-            foreach(BindingKey key in _arguments.Keys)
+            RemoveBindings();
+            AddToNonLazy();
+        }
+
+        private void RemoveBindings()
+		{
+            foreach (BindingKey key in _arguments.Keys)
                 _arguments.BindingStorage.RemoveBinding(key);
             _arguments.Keys.Clear();
+        }
+
+        private void AddToNonLazy()
+        {
             _arguments.BindingStorage.AddToNonLazy(_arguments.Binding);
         }
     }

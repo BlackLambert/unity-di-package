@@ -7,7 +7,7 @@ namespace SBaier.DI.Tests
 {
     public class DIContainerBinderTests
     {
-        private IComparable[] _testIDs = new IComparable[] {default, 32, "Bla", FooEnum.Two, FooEnum.Zero };
+        private static IComparable[] _testIDs = new IComparable[] {default, 32, "Bla", FooEnum.Two, FooEnum.Zero };
 
         private Mock<BindingStorage> _bindingStorageMock;
         private BindingStorage BindingStorage => _bindingStorageMock.Object;
@@ -32,79 +32,67 @@ namespace SBaier.DI.Tests
         }
 
         [Test]
-        public void Bind_AddsBindingToStorage()
+        [TestCaseSource(nameof(_testIDs))]
+        public void Bind_AddsBindingToStorage(IComparable iD)
 		{
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<Foo>();
-                WhenBindIsCalled<Foo>(iD);
-                ThenBindingIsAddedToStorage<Foo>(iD);
-            }
+            GivenADefaultSetup<Foo>();
+            WhenBindIsCalled<Foo>(iD);
+            ThenBindingIsAddedToStorage<Foo>(iD);
 		}
 
         [Test]
-        public void BindToSelf_ChangesBindingAsExpected()
+        [TestCaseSource(nameof(_testIDs))]
+        public void BindToSelf_ChangesBindingAsExpected(IComparable iD)
 		{
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<Foo>();
-                WhenBindToSelfIsCalled<Foo>(iD);
-                ThenBindingIsAddedToStorage<Foo>(iD);
-                ThenBoundContractTypeIsConcreteType<Foo>();
-            }
+            GivenADefaultSetup<Foo>();
+            WhenBindToSelfIsCalled<Foo>(iD);
+            ThenBindingIsAddedToStorage<Foo>(iD);
+            ThenBoundContractTypeIsConcreteType<Foo>();
 		}
 
         [Test]
-        public void BindToNewSelf_ChangesBindingAsExpected()
+        [TestCaseSource(nameof(_testIDs))]
+        public void BindToNewSelf_ChangesBindingAsExpected(IComparable iD)
 		{
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<Foo>();
-                WhenBindToNewSelfIsCalled<Foo>(iD);
-                ThenBindingIsAddedToStorage<Foo>(iD);
-                ThenBoundContractTypeIsConcreteType<Foo>();
-                ThenCreationModeIs(InstanceCreationMode.FromNew);
-                ThenCreateInstanceFunctionCreatesNewConcrete<Foo>();
-            }
+            GivenADefaultSetup<Foo>();
+            WhenBindToNewSelfIsCalled<Foo>(iD);
+            ThenBindingIsAddedToStorage<Foo>(iD);
+            ThenBoundContractTypeIsConcreteType<Foo>();
+            ThenCreationModeIs(InstanceCreationMode.FromNew);
+            ThenCreateInstanceFunctionCreatesNewConcrete<Foo>();
         }
 
         [Test]
-        public void BindInstance_ChangesBindingAsExpected()
+        [TestCaseSource(nameof(_testIDs))]
+        public void BindInstance_ChangesBindingAsExpected(IComparable iD)
         {
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<Foo>();
-                Foo foo = new Foo();
-                WhenBindInstanceIsCalled<Foo>(iD, foo);
-                ThenBindingIsAddedToStorage<Foo>(iD);
-                ThenBoundContractTypeIsConcreteType<Foo>();
-                ThenProvideInstanceReturns<Foo>(iD, foo);
-                ThenCreationModeIs(InstanceCreationMode.FromInstance);
-            }
+            GivenADefaultSetup<Foo>();
+            Foo foo = new Foo();
+            WhenBindInstanceIsCalled<Foo>(iD, foo);
+            ThenBindingIsAddedToStorage<Foo>(iD);
+            ThenBoundContractTypeIsConcreteType<Foo>();
+            ThenProvideInstanceReturns<Foo>(iD, foo);
+            ThenCreationModeIs(InstanceCreationMode.FromInstance);
         }
 
         [Test]
-        public void BindComponent_ChangesBindingAsExpected()
+        [TestCaseSource(nameof(_testIDs))]
+        public void BindComponent_ChangesBindingAsExpected(IComparable iD)
         {
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<FooComponent>();
-                WhenBindComponentIsCalled<FooComponent>(iD);
-                ThenBindingIsAddedToStorage<FooComponent>(iD);
-                ThenBoundContractTypeIsConcreteType<FooComponent>();
-            }
+            GivenADefaultSetup<FooComponent>();
+            WhenBindComponentIsCalled<FooComponent>(iD);
+            ThenBindingIsAddedToStorage<FooComponent>(iD);
+            ThenBoundContractTypeIsConcreteType<FooComponent>();
         }
 
         [Test]
-        public void BindObject_ChangesBindingAsExpected()
+        [TestCaseSource(nameof(_testIDs))]
+        public void BindObject_ChangesBindingAsExpected(IComparable iD)
         {
-            foreach (IComparable iD in _testIDs)
-            {
-                GivenADefaultSetup<Sprite>();
-                WhenBindObjectIsCalled<Sprite>(iD);
-                ThenBindingIsAddedToStorage<Sprite>(iD);
-                ThenBoundContractTypeIsConcreteType<Sprite>();
-            }
+            GivenADefaultSetup<Sprite>();
+            WhenBindObjectIsCalled<Sprite>(iD);
+            ThenBindingIsAddedToStorage<Sprite>(iD);
+            ThenBoundContractTypeIsConcreteType<Sprite>();
         }
 
 		private void GivenADefaultSetup<T>()
