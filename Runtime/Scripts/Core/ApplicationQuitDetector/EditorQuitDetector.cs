@@ -1,10 +1,12 @@
+#if UNITY_EDITOR
 using UnityEditor;
-using System;
+#endif
 
 namespace SBaier.DI
 {
 	public class EditorQuitDetector : QuitDetector
 	{
+#if UNITY_EDITOR
 		private void Start()
 		{
 			EditorApplication.playModeStateChanged += OnPlaymodeStateChanged;
@@ -17,8 +19,10 @@ namespace SBaier.DI
 
 		private void OnPlaymodeStateChanged(PlayModeStateChange change)
 		{
+
 			if (change == PlayModeStateChange.ExitingPlayMode)
 				OnApplicationQuitting();
 		}
+#endif
 	}
 }
