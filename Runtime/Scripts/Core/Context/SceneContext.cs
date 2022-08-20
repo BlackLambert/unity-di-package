@@ -38,8 +38,9 @@ namespace SBaier.DI
 			AddToProvider();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             RemoveFromProvider();
         }
 

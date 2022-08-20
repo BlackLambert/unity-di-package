@@ -20,8 +20,13 @@ namespace SBaier.DI
         protected Resolver _resolver => DIContext.GetResolver();
         protected Binder _binder => DIContext.GetBinder();
 
+	    protected virtual void OnDestroy()
+		{
+			if(Initialized)
+                DIContext.Reset();
+        }
 
-        public virtual void Init(Resolver baseResolver)
+		public virtual void Init(Resolver baseResolver)
         {
             ValidateInitCall();
             Initialized = true;
@@ -35,11 +40,12 @@ namespace SBaier.DI
 
         void Context.Reset()
         {
+            ValidateResetCall();
             Initialized = false;
             DIContext.Reset();
         }
 
-        public void AddInstaller(Installer installer)
+		public void AddInstaller(Installer installer)
         {
             _installers.Add(installer);
         }
@@ -84,6 +90,12 @@ namespace SBaier.DI
         {
             if (Initialized)
                 throw CreateContextAlreadyInitializedException();
+        }
+
+        private void ValidateResetCall()
+        {
+            if (!Initialized)
+                throw new InvalidOperationException("Trying to reset an uninitialized context");
         }
 
         protected abstract ContextAlreadyInitializedException CreateContextAlreadyInitializedException();

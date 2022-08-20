@@ -3,33 +3,29 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-	public abstract class PrefabFactoryBase<TPrefab> : Injectable, IDisposable where TPrefab : Component
+	public abstract class PrefabFactoryBase<TPrefab> : Injectable where TPrefab : Component
 	{
 		private GameObjectInjector _injector;
 		private TPrefab _prefab;
-		private bool _initialPrefabActiveState;
+
 		protected Resolver BaseResolver { get; private set; }
 
 		public virtual void Inject(Resolver resolver)
 		{
 			_injector = resolver.Resolve<GameObjectInjector>();
 			_prefab = resolver.Resolve<TPrefab>();
-			_initialPrefabActiveState = _prefab.gameObject.activeSelf;
-			_prefab.gameObject.SetActive(false);
 			BaseResolver = resolver;
-		}
-
-		public void Dispose()
-		{
-			_prefab.gameObject.SetActive(_initialPrefabActiveState);
 		}
 
 		protected TPrefab CreateInstance(Resolver resolver)
 		{
-			TPrefab instance = GameObject.Instantiate(_prefab);
-			_injector.InjectIntoContextHierarchy(instance.transform, resolver);
-			instance.gameObject.SetActive(true);
-			return instance;
+			bool formerActiveState = _prefab.gameObject.activeSelf;
+			_prefab.gameObject.SetActive(false);
+			TPrefab result = GameObject.Instantiate(_prefab);
+			_injector.InjectIntoContextHierarchy(result.transform, resolver);
+			result.gameObject.SetActive(formerActiveState);
+			_prefab.gameObject.SetActive(formerActiveState);
+			return result;
 		}
 	}
 
