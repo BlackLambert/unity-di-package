@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-	public class ComponentCreationModeBindingContext<TConcrete> : CreationModeBindingContext<TConcrete> where TConcrete : Component
+	public class ComponentCreationModeBindingContext<TConcrete> : 
+		CreationModeBindingContext<TConcrete> where TConcrete : Component
 	{
 		public ComponentCreationModeBindingContext(BindingArguments arguments) : base(arguments) { }
 

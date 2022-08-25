@@ -32,8 +32,8 @@ namespace SBaier.DI.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void Bind_AddsBindingToStorage(IComparable iD)
+        public void Bind_AddsBindingToStorage(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
 		{
             GivenADefaultSetup<Foo>();
             WhenBindIsCalled<Foo>(iD);
@@ -41,8 +41,8 @@ namespace SBaier.DI.Tests
 		}
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void BindToSelf_ChangesBindingAsExpected(IComparable iD)
+        public void BindToSelf_ChangesBindingAsExpected(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
 		{
             GivenADefaultSetup<Foo>();
             WhenBindToSelfIsCalled<Foo>(iD);
@@ -51,8 +51,8 @@ namespace SBaier.DI.Tests
 		}
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void BindToNewSelf_ChangesBindingAsExpected(IComparable iD)
+        public void BindToNewSelf_ChangesBindingAsExpected(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
 		{
             GivenADefaultSetup<Foo>();
             WhenBindToNewSelfIsCalled<Foo>(iD);
@@ -63,8 +63,8 @@ namespace SBaier.DI.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void BindInstance_ChangesBindingAsExpected(IComparable iD)
+        public void BindInstance_ChangesBindingAsExpected(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
         {
             GivenADefaultSetup<Foo>();
             Foo foo = new Foo();
@@ -76,8 +76,8 @@ namespace SBaier.DI.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void BindComponent_ChangesBindingAsExpected(IComparable iD)
+        public void BindComponent_ChangesBindingAsExpected(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
         {
             GivenADefaultSetup<FooComponent>();
             WhenBindComponentIsCalled<FooComponent>(iD);
@@ -86,8 +86,8 @@ namespace SBaier.DI.Tests
         }
 
         [Test]
-        [TestCaseSource(nameof(_testIDs))]
-        public void BindObject_ChangesBindingAsExpected(IComparable iD)
+        public void BindObject_ChangesBindingAsExpected(
+            [ValueSource(nameof(_testIDs))] IComparable iD)
         {
             GivenADefaultSetup<Sprite>();
             WhenBindObjectIsCalled<Sprite>(iD);
