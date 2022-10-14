@@ -66,7 +66,7 @@ namespace SBaier.DI
         private void ValidateNotBound(BindingKey key)
         {
             if (HasBinding(key))
-                throw new AlreadyBoundException();
+                throw new AlreadyBoundException(key.Type);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace  SBaier.DI
                 case InstanceCreationMode.FromInstance:
                 case InstanceCreationMode.FromNewComponentOn:
                 case InstanceCreationMode.FromResources:
+                case InstanceCreationMode.FromNewComponentOnNewGameObject:
                     return (TInstance)instantiationInfo.ProvideInstanceFunction();
                 case InstanceCreationMode.FromFactory:
                     return CreateByFactory<TInstance>(resolver);
@@ -51,7 +52,7 @@ namespace  SBaier.DI
 		{
             GameObject instance = GameObject.Instantiate(prefab);
             return instance.GetComponent<TInstance>();
-		}
+        }
     }
 
 }
