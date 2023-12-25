@@ -6,11 +6,11 @@ namespace SBaier.DI
 	{
 		public void Reset(GameObject gameObject)
 		{
-			DeactivateChildren(gameObject);
+			ResetChildren(gameObject);
 			gameObject.GetComponent<Context>()?.Reset();
 		}
 
-		private void DeactivateChildren(GameObject gameObject)
+		private void ResetChildren(GameObject gameObject)
         {
 			foreach (Transform child in gameObject.transform)
 				Reset(child.gameObject);

@@ -8,6 +8,7 @@ namespace SBaier.DI
 		private GameObjectContextsReseter _reseter;
 		private MonoPoolCache _cache;
 		private TItem _prefab;
+		private ObjectActivator _objectActivator;
 		private int _prefabHash;
 
 		protected bool HasStoredItem => _cache.HasObjects(_prefabHash);
@@ -18,6 +19,7 @@ namespace SBaier.DI
 			_reseter = resolver.Resolve<GameObjectContextsReseter>();
 			_prefab = resolver.Resolve<TItem>();
 			_cache = resolver.Resolve<MonoPoolCache>();
+			_objectActivator = resolver.Resolve<ObjectActivator>();
 			_prefabHash = _prefab.GetHashCode();
 		}
 
@@ -25,14 +27,15 @@ namespace SBaier.DI
 		{
 			TItem item = _cache.Take<TItem>(_prefabHash);
 			_injector.InjectIntoContextHierarchy(item.transform, resolver);
-			item.gameObject.SetActive(true);
+			_objectActivator.Activate(item.gameObject);
 			return item;
 		}
 
 		public void Return(TItem item)
 		{
-			item.gameObject.SetActive(false);
-			_reseter.Reset(item.gameObject);
+			GameObject gameObject = item.gameObject;
+			_objectActivator.Disable(gameObject);
+			_reseter.Reset(gameObject);
 			_cache.Store(_prefabHash, item);
 		}
 	}

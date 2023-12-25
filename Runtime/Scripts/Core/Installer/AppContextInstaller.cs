@@ -27,6 +27,7 @@ namespace SBaier.DI
             binder.Bind<Factory<ChildDIContext, Resolver>>().ToNew<ChildDIContextFactory>();
             binder.BindToSelf<MonoPoolCache>().FromMethod(CreatePoolCache).AsSingle();
             binder.BindToNewSelf<SceneObjectsDisabler>();
+            binder.Bind<ObjectActivator>().ToNew<DeepObjectActivator>();
             new BindingValidationInstaller().InstallBindings(binder);
             new QuitDetectorInstaller(_contextObject).InstallBindings(binder);
         }

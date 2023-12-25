@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-    public class MonoPool<TItem> : MonoPoolBase<TItem>, Pool<TItem>, Injectable where TItem : Component
+    public class MonoPool<TItem> : MonoPoolBase<TItem>, Pool<TItem> where TItem : Component
     {
         private Factory<TItem> _factory;
 		protected Resolver _resolver;

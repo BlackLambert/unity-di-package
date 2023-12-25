@@ -14,13 +14,7 @@ namespace SBaier.DI.Tests
         private Mock<BindingStorage> _bindingStorageMock;
         private BindingStorage BindingStorage => _bindingStorageMock.Object;
         private Binding _binding;
-
-        [TearDown]
-        public void Destruct()
-        {
-            Clear(_createdObjects);
-        }
-
+        
         public static GameObject[] CreateValidTestPrefabs()
         {
             GameObject prefab1 = new GameObject("One");
