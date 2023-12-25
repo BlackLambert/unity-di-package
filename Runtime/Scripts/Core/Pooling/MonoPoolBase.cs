@@ -45,7 +45,11 @@ namespace SBaier.DI
 		private IEnumerator StoreDelayed(TItem item)
 		{
 			yield return null;
-			_cache.Store(_prefabHash, item);
+
+			if (item != null)
+			{
+				_cache.Store(_prefabHash, item);
+			}
 		}
 	}
 }
