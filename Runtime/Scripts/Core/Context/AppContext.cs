@@ -26,7 +26,7 @@ namespace SBaier.DI
 
         private void InstallAppContextBindings()
         {
-            AppContextInstaller installer = new AppContextInstaller(_dIContext, gameObject);
+            AppContextInstaller installer = new AppContextInstaller(_dIContext, gameObject, this);
             installer.InstallBindings(_binder);
         }
 

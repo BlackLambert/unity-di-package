@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace SBaier.DI
@@ -10,6 +11,7 @@ namespace SBaier.DI
 		private TItem _prefab;
 		private ObjectActivator _objectActivator;
 		private int _prefabHash;
+		private MonoBehaviour _coroutineHelper;
 
 		protected bool HasStoredItem => _cache.HasObjects(_prefabHash);
 
@@ -21,6 +23,7 @@ namespace SBaier.DI
 			_cache = resolver.Resolve<MonoPoolCache>();
 			_objectActivator = resolver.Resolve<ObjectActivator>();
 			_prefabHash = _prefab.GetHashCode();
+			_coroutineHelper = resolver.Resolve<MonoBehaviour>();
 		}
 
 		protected TItem TakeItem(Resolver resolver)
@@ -36,6 +39,12 @@ namespace SBaier.DI
 			GameObject gameObject = item.gameObject;
 			_objectActivator.Disable(gameObject);
 			_reseter.Reset(gameObject);
+			_coroutineHelper.StartCoroutine(StoreDelayed(item));
+		}
+
+		private IEnumerator StoreDelayed(TItem item)
+		{
+			yield return null;
 			_cache.Store(_prefabHash, item);
 		}
 	}
