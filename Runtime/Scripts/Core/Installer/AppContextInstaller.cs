@@ -7,13 +7,11 @@ namespace SBaier.DI
     {
         private DIContext _diContext;
         private GameObject _contextObject;
-        private MonoBehaviour _behaviour;
 
-        public AppContextInstaller(DIContext dIContext, GameObject contextObject, MonoBehaviour behaviour)
+        public AppContextInstaller(DIContext dIContext, GameObject contextObject)
         {
             _diContext = dIContext;
             _contextObject = contextObject;
-            _behaviour = behaviour;
         }
 
         public void InstallBindings(Binder binder)
@@ -30,7 +28,6 @@ namespace SBaier.DI
             binder.BindToSelf<MonoPoolCache>().FromMethod(CreatePoolCache).AsSingle();
             binder.BindToNewSelf<SceneObjectsDisabler>();
             binder.Bind<ObjectActivator>().ToNew<BasicObjectActivator>();
-            binder.BindInstance(_behaviour);
             new BindingValidationInstaller().InstallBindings(binder);
             new QuitDetectorInstaller(_contextObject).InstallBindings(binder);
         }
