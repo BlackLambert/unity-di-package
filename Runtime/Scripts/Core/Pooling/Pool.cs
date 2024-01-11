@@ -11,4 +11,10 @@ namespace SBaier.DI
 		TItem Request(TArg arg);
 		void Return(TItem item);
 	}
+
+	public interface Pool<TItem, TArg1, TArg2>
+	{
+		TItem Request(TArg1 arg1, TArg2 arg2);
+		void Return(TItem item);
+	}
 }

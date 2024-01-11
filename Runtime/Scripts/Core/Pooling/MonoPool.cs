@@ -2,60 +2,58 @@ using UnityEngine;
 
 namespace SBaier.DI
 {
-    public class MonoPool<TItem> : MonoPoolBase<TItem>, Pool<TItem> where TItem : Component
+	public class MonoPool<TItem> : MonoPoolBase<TItem>, Pool<TItem>, Pool<TItem, Transform> where TItem : Component
     {
-        private Factory<TItem> _factory;
-		protected Resolver _resolver;
-
-		public override void Inject(Resolver resolver)
-		{
-			base.Inject(resolver);
-			_factory = resolver.Resolve<Factory<TItem>>();
-			_resolver = resolver;
-		}
-
-		public TItem Request()
-		{
-			if (!HasStoredItem)
-				return CreateInstance();
-			return TakeItem(_resolver);
-		}
-
-		private TItem CreateInstance()
-		{
-			return _factory.Create();
-		}
-	}
-
-	public class MonoPool<TItem, TArg> : MonoPoolBase<TItem>, Pool<TItem, TArg>, Injectable where TItem : Component
-	{
-		private Factory<TItem, TArg> _factory;
+        private Factory<TItem, Transform> _factory;
 		private Resolver _resolver;
 
 		public override void Inject(Resolver resolver)
 		{
 			base.Inject(resolver);
-			_factory = resolver.Resolve<Factory<TItem, TArg>>();
+			_factory = resolver.Resolve<Factory<TItem, Transform>>();
 			_resolver = resolver;
+		}
+
+		public TItem Request()
+		{
+			return Request(null);
+		}
+
+		public TItem Request(Transform parent)
+		{
+			return !HasStoredItem ? _factory.Create(parent) : TakeItem(_resolver);
+		}
+    }
+
+	public class MonoPool<TItem, TArg> : MonoPoolBase<TItem>, Pool<TItem, TArg>, Pool<TItem, TArg, Transform> where TItem : Component
+	{
+		private const int _argumentsCount = 1;
+		
+		private Factory<TItem, TArg, Transform> _factory;
+		private ArgumentsResolver _resolver;
+
+		public override void Inject(Resolver resolver)
+		{
+			base.Inject(resolver);
+			_factory = resolver.Resolve<Factory<TItem, TArg, Transform>>();
+			_resolver = new ArgumentsResolver(resolver, _argumentsCount);
 		}
 
 		public TItem Request(TArg arg)
 		{
-			if (!HasStoredItem)
-				return CreateInstance(arg);
-			return TakeItem(CreateResolver(arg));
+			return !HasStoredItem ? _factory.Create(arg, null) : TakeItem(PrepareResolver(arg));
 		}
 
-		private ArgumentsResolver CreateResolver(TArg arg)
+		public TItem Request(TArg arg, Transform parent)
 		{
-			ArgumentsResolver resolver = new ArgumentsResolver(_resolver);
-			resolver.AddArgument(arg);
-			return resolver;
+			return !HasStoredItem ? _factory.Create(arg, parent) : TakeItem(PrepareResolver(arg));
 		}
 
-		private TItem CreateInstance(TArg arg)
+		private ArgumentsResolver PrepareResolver(TArg arg)
 		{
-			return _factory.Create(arg);
+			_resolver.Clear();
+			_resolver.AddArgument(arg);
+			return _resolver;
 		}
 	}
 }

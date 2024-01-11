@@ -65,7 +65,8 @@ namespace SBaier.DI
 			_cache.Clear();
 		}
 
-		public class EmptyCacheException : InvalidOperationException {}
-		public class MissingComponentException : InvalidOperationException {}
+		private class EmptyCacheException : InvalidOperationException {}
+
+		private class MissingComponentException : InvalidOperationException {}
 	}
 }
