@@ -30,30 +30,30 @@ namespace SBaier.DI
 		private const int _argumentsCount = 1;
 		
 		private Factory<TItem, TArg, Transform> _factory;
-		private ArgumentsResolver _resolver;
+		private Resolver _baseResolver;
 
 		public override void Inject(Resolver resolver)
 		{
 			base.Inject(resolver);
 			_factory = resolver.Resolve<Factory<TItem, TArg, Transform>>();
-			_resolver = new ArgumentsResolver(resolver, _argumentsCount);
+			_baseResolver = resolver;
 		}
 
 		public TItem Request(TArg arg)
 		{
-			return !HasStoredItem ? _factory.Create(arg, null) : TakeItem(PrepareResolver(arg));
+			return !HasStoredItem ? _factory.Create(arg, null) : TakeItem(CreateResolver(arg));
 		}
 
 		public TItem Request(TArg arg, Transform parent)
 		{
-			return !HasStoredItem ? _factory.Create(arg, parent) : TakeItem(PrepareResolver(arg));
+			return !HasStoredItem ? _factory.Create(arg, parent) : TakeItem(CreateResolver(arg));
 		}
 
-		private ArgumentsResolver PrepareResolver(TArg arg)
+		private ArgumentsResolver CreateResolver(TArg arg)
 		{
-			_resolver.Clear();
-			_resolver.AddArgument(arg);
-			return _resolver;
+			ArgumentsResolver resolver = new ArgumentsResolver(_baseResolver, _argumentsCount);
+			resolver.AddArgument(arg);
+			return resolver;
 		}
 	}
 }

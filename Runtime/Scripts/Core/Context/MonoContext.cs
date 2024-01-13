@@ -17,8 +17,8 @@ namespace SBaier.DI
         protected abstract DIContext DIContext { get; }
         public bool Initialized { get; private set; } = false;
 
-        protected Resolver _resolver => DIContext.GetResolver();
-        protected Binder _binder => DIContext.GetBinder();
+        protected Resolver _resolver => DIContext.Resolver;
+        protected Binder _binder => DIContext.Binder;
 
 	    protected virtual void OnDestroy()
 		{
@@ -31,7 +31,6 @@ namespace SBaier.DI
             ValidateInitCall();
             Initialized = true;
             DoInit(baseResolver);
-            InjectIntoInstallers();
             InstallBindings();
             DIContext.ValidateBindings();
             DoInjection();
@@ -62,7 +61,7 @@ namespace SBaier.DI
         private void InstallBindings()
         {
             foreach (Installer installer in GetAllInstallers())
-                InstallBindings(installer, DIContext.GetResolver());
+                InstallBindings(installer, DIContext.Resolver);
         }
 
         private List<Installer> GetAllInstallers()
@@ -77,13 +76,6 @@ namespace SBaier.DI
         {
             (installer as Injectable)?.Inject(resolver);
             installer.InstallBindings(_binder);
-        }
-
-        private void InjectIntoInstallers()
-        {
-            List<Installer> installers = GetAllInstallers();
-            foreach (Installer installer in installers)
-                (installer as Injectable)?.Inject(DIContext.GetResolver());
         }
 
         private void ValidateInitCall()

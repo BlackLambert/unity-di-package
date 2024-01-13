@@ -2,10 +2,10 @@
 {
     public interface DIContext
     {
+	    Resolver Resolver { get; }
+	    Binder Binder { get; }
         void ValidateBindings();
         void CreateNonLazyInstances();
-        Resolver GetResolver();
-		Binder GetBinder();
         TContract GetInstance<TContract>(Binding binding);
 		void Reset();
 	}

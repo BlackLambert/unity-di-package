@@ -5,7 +5,8 @@ namespace SBaier.DI
 {
     public class BindingsContainer
     {
-        private readonly Dictionary<BindingKey, Binding> _bindings = new Dictionary<BindingKey, Binding>();
+        private readonly Dictionary<BindingKey, Binding> _bindings = 
+            new Dictionary<BindingKey, Binding>(new BindingKeyComparer());
 
         public void AddBinding<TContract>(Binding binding, IComparable iD = null)
         {
@@ -23,11 +24,6 @@ namespace SBaier.DI
         {
             ValidateBindingExists(key);
             return _bindings[key];
-        }
-
-        public IEnumerable<Binding> GetBindings()
-        {
-            return _bindings.Values;
         }
 
         public IEnumerable<InstantiationInfo> GetInstantiationInfos()

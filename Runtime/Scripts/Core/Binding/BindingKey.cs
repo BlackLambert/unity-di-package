@@ -4,8 +4,8 @@ namespace SBaier.DI
 {
     public struct BindingKey
     {
-        public readonly Type Type { get; }
-        public readonly IComparable ID { get; }
+        public Type Type { get; }
+        public IComparable ID { get; }
 
         public BindingKey(Type contract)
         {

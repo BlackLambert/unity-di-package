@@ -15,6 +15,9 @@ namespace SBaier.DI
         private Resolver _dIContainerResolver;
         private Binder _dIContainerBinder;
 
+        public Resolver Resolver => _dIContainerResolver;
+        public Binder Binder => _dIContainerBinder;
+        
         private BindingsContainer _bindings => _container.Bindings;
         private NonLazyContainer _nonLazyBindings => _container.NonLazyInstanceInfos;
         private SingleInstancesContainer _singleInstances => _container.SingleInstances;
@@ -45,26 +48,16 @@ namespace SBaier.DI
 
 		public void ValidateBindings()
 		{
-            List<InstantiationInfo> instantiationInfo = _bindings.GetInstantiationInfos().ToList();
-            instantiationInfo.AddRange(_nonLazyBindings.GetCopy());
-            foreach (Binding binding in instantiationInfo)
-                _bindingValidator.Validate(binding);
+            foreach (InstantiationInfo info in _bindings.GetInstantiationInfos())
+                _bindingValidator.Validate(info);
+            foreach (InstantiationInfo info in _nonLazyBindings.InstanceInfos)
+                _bindingValidator.Validate(info);
         }
 
         public void CreateNonLazyInstances()
         {
-            foreach(InstantiationInfo instantiationInfo in _nonLazyBindings.GetCopy())
+            foreach(InstantiationInfo instantiationInfo in _nonLazyBindings.InstanceInfos)
                 CreateNonLazyInstance(instantiationInfo);
-        }
-
-        public Resolver GetResolver()
-        {
-            return _dIContainerResolver;
-        }
-
-        public Binder GetBinder()
-        {
-            return _dIContainerBinder;
         }
 
         public TContract GetInstance<TContract>(Binding binding)
@@ -95,7 +88,7 @@ namespace SBaier.DI
 
         private TContract CreateInstance<TContract>(InstantiationInfo instantiationInfo)
         {
-            TContract instance = _instanceFactory.Create<TContract>(GetResolver(), instantiationInfo);
+            TContract instance = _instanceFactory.Create<TContract>(Resolver, instantiationInfo);
             TryInjection(instance, instantiationInfo);
             TryAddDisposables(instance, instantiationInfo);
             return instance;
@@ -195,7 +188,7 @@ namespace SBaier.DI
 
         private Resolver GetResolverFor(InstantiationInfo instantiationInfo)
         {
-            ArgumentsResolver result = new ArgumentsResolver(GetResolver());
+            ArgumentsResolver result = new ArgumentsResolver(Resolver);
             result.AddArguments(instantiationInfo.Arguments);
             return result;
         }

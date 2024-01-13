@@ -18,9 +18,7 @@ namespace SBaier.DI
 
 		protected override TContract DoResolve<TContract>(BindingKey key)
 		{
-			if (_baseResolver.IsResolvable(key))
-				return _baseResolver.Resolve<TContract>(key);
-			return _parent.Resolve<TContract>(key);
+			return _baseResolver.IsResolvable(key) ? _baseResolver.Resolve<TContract>(key) : _parent.Resolve<TContract>(key);
 		}
 	}
 }

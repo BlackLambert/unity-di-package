@@ -5,6 +5,7 @@ namespace SBaier.DI
 {
     public class NonLazyContainer
     {
+        public IReadOnlyCollection<InstantiationInfo> InstanceInfos => _nonLazyInstanceInfos;
         private HashSet<InstantiationInfo> _nonLazyInstanceInfos = new HashSet<InstantiationInfo>();
 
         public void TryRemoving(InstantiationInfo binding)
@@ -21,11 +22,6 @@ namespace SBaier.DI
         public void Add(InstantiationInfo binding)
         {
             _nonLazyInstanceInfos.Add(binding);
-        }
-
-        public List<InstantiationInfo> GetCopy()
-        {
-            return new List<InstantiationInfo>(_nonLazyInstanceInfos);
         }
 
 		internal void Clear()

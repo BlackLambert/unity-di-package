@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace SBaier.DI
@@ -12,8 +13,7 @@ namespace SBaier.DI
 
         public void InjectIntoContextHierarchy(Transform root, Resolver resolver)
         {
-            GameObjectContext gameObjectContext = root.GetComponent<GameObjectContext>();
-            if (gameObjectContext != null)
+            if (root.TryGetComponent(out GameObjectContext gameObjectContext))
                 gameObjectContext.Init(resolver);
             else
                 InjectIntoHierarchy(root, resolver);
@@ -21,11 +21,15 @@ namespace SBaier.DI
 
         private void InjectIntoChildren(Transform root, Resolver resolver)
         {
-            foreach (Transform child in root)
-                InjectIntoContextHierarchy(child, resolver);
+            IEnumerator iterator = root.GetEnumerator();
+            iterator.Reset();
+            while (iterator.MoveNext())
+            {
+                InjectIntoContextHierarchy(iterator.Current as Transform, resolver);
+            }
         }
 
-        public void InjectInto(Transform root, Resolver resolver)
+        private void InjectInto(Transform root, Resolver resolver)
         {
             Injectable[] injectables = root.GetComponents<Injectable>();
             foreach (Injectable injectable in injectables)

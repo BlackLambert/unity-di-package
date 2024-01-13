@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 namespace SBaier.DI
 {
     public class GameObjectContext : MonoContext
@@ -30,7 +27,7 @@ namespace SBaier.DI
 
 		protected override void DoInjection()
         {
-            _injector.InjectIntoHierarchy(transform, DIContext.GetResolver());
+            _injector.InjectIntoHierarchy(transform, DIContext.Resolver);
         }
 
         protected override ContextAlreadyInitializedException CreateContextAlreadyInitializedException()

@@ -31,7 +31,7 @@ namespace SBaier.DI
 				_prefab.gameObject.SetActive(formerActiveState);
 				return result;
 			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 				Debug.LogError($"Failed to create an instance of {_prefab.name}");
 				throw;
@@ -65,30 +65,22 @@ namespace SBaier.DI
 		Factory<TPrefab, TArg, Transform> where TPrefab : Component
 	{
 		private const int _argumentsCount = 1;
-		
-		private ArgumentsResolver _resolver;
-		
-		public override void Inject(Resolver resolver)
-		{
-			base.Inject(resolver);
-			_resolver = new ArgumentsResolver(BaseResolver, _argumentsCount);
-		}
 
 		public TPrefab Create(TArg arg)
 		{
-			return CreateInstance(PrepareResolver(arg));
+			return CreateInstance(CreateResolver(arg));
 		}
 
 		public TPrefab Create(TArg arg, Transform parent)
 		{
-			return CreateInstance(PrepareResolver(arg), parent);
+			return CreateInstance(CreateResolver(arg), parent);
 		}
 
-		private Resolver PrepareResolver(TArg arg)
+		private Resolver CreateResolver(TArg arg)
 		{
-			_resolver.Clear();
-			_resolver.AddArgument(arg);
-			return _resolver;
+			ArgumentsResolver resolver = new ArgumentsResolver(BaseResolver, _argumentsCount);
+			resolver.AddArgument(arg);
+			return resolver;
 		}
 	}
 }
