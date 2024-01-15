@@ -31,9 +31,9 @@ namespace SBaier.DI
             Bindings.AddBinding<TContract>(binding, iD);
         }
 
-		public void AddToNonLazy(InstantiationInfo instantiationInfo)
+		public void AddToNonLazy(Binding binding)
 		{
-            NonLazyInstanceInfos.Add(instantiationInfo);
+            NonLazyInstanceInfos.Add(binding);
 		}
 
 		public void RemoveBinding(BindingKey key)

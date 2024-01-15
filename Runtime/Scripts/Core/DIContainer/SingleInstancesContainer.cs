@@ -5,7 +5,8 @@ namespace SBaier.DI
 {
     public class SingleInstancesContainer
     {
-        private readonly Dictionary<Binding, object> _singleInstances = new Dictionary<Binding, object>();
+        private readonly Dictionary<Binding, object> _singleInstances = 
+            new Dictionary<Binding, object>(new BindingComparer());
 
         public bool Has(Binding binding)
         {

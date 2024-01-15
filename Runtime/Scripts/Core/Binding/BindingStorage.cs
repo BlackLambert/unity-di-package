@@ -6,6 +6,6 @@ namespace SBaier.DI
     {
         public void AddBinding<TContract>(Binding binding, IComparable iD = default);
         public void RemoveBinding(BindingKey key);
-        public void AddToNonLazy(InstantiationInfo instantiationInfo);
+        public void AddToNonLazy(Binding binding);
     }
 }

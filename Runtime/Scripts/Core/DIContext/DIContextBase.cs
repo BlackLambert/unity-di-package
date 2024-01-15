@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace SBaier.DI
@@ -17,7 +15,7 @@ namespace SBaier.DI
 
         public Resolver Resolver => _dIContainerResolver;
         public Binder Binder => _dIContainerBinder;
-        
+
         private BindingsContainer _bindings => _container.Bindings;
         private NonLazyContainer _nonLazyBindings => _container.NonLazyInstanceInfos;
         private SingleInstancesContainer _singleInstances => _container.SingleInstances;
@@ -42,27 +40,28 @@ namespace SBaier.DI
 
         void DIContext.Reset()
         {
-            DestroyInstances();
+            _disposables.Dispose();
+            _objects.Destroy();
             _container.Reset();
         }
 
-		public void ValidateBindings()
-		{
+        public void ValidateBindings()
+        {
             foreach (InstantiationInfo info in _bindings.GetInstantiationInfos())
                 _bindingValidator.Validate(info);
-            foreach (InstantiationInfo info in _nonLazyBindings.InstanceInfos)
-                _bindingValidator.Validate(info);
+            foreach (Binding binding in _nonLazyBindings.Bindings)
+                _bindingValidator.Validate(binding);
         }
 
         public void CreateNonLazyInstances()
         {
-            foreach(InstantiationInfo instantiationInfo in _nonLazyBindings.InstanceInfos)
-                CreateNonLazyInstance(instantiationInfo);
+            foreach (Binding binding in _nonLazyBindings.Bindings)
+                CreateNonLazyInstance(binding);
         }
 
         public TContract GetInstance<TContract>(Binding binding)
         {
-            _nonLazyBindings.TryRemoving(binding);
+            _nonLazyBindings.TryAddToCreated(binding);
             return binding.AmountMode switch
             {
                 InstanceAmountMode.Single => ResolveSingleInstance<TContract>(binding),
@@ -74,9 +73,9 @@ namespace SBaier.DI
 
         private TContract ResolveSingleInstance<TContract>(Binding binding)
         {
-            if (_singleInstances.Has(binding))
-                return _singleInstances.Get<TContract>(binding);
-            return CreateSingleInstance<TContract>(binding);
+            return _singleInstances.Has(binding)
+                ? _singleInstances.Get<TContract>(binding)
+                : CreateSingleInstance<TContract>(binding);
         }
 
         private TContract CreateSingleInstance<TContract>(Binding binding)
@@ -90,21 +89,21 @@ namespace SBaier.DI
         {
             TContract instance = _instanceFactory.Create<TContract>(Resolver, instantiationInfo);
             TryInjection(instance, instantiationInfo);
-            TryAddDisposables(instance, instantiationInfo);
+            StoreInstance(instance, instantiationInfo);
             return instance;
         }
 
-		private void TryAddDisposables<TContract>(TContract instance, InstantiationInfo instantiationInfo)
-		{
+        private void StoreInstance<TContract>(TContract instance, InstantiationInfo instantiationInfo)
+        {
             if (instantiationInfo.CreationMode == InstanceCreationMode.FromInstance)
                 return;
-			TryAddDisposable(instance as IDisposable);
-            if(!TryAddGameObject((instance as Component)?.gameObject, instantiationInfo))
-                TryAddObject(instance as UnityEngine.Object, instantiationInfo);
+            TryAddDisposable(instance as IDisposable);
+            if (instance is Component component && !TryAddGameObject(component.gameObject, instantiationInfo))
+                _objects.Add(component);
         }
 
-		private void TryAddDisposable(IDisposable disposable)
-		{
+        private void TryAddDisposable(IDisposable disposable)
+        {
             if (disposable == null)
                 return;
             _disposables.Add(disposable);
@@ -112,8 +111,6 @@ namespace SBaier.DI
 
         private bool TryAddGameObject(GameObject gameObject, InstantiationInfo instantiationInfo)
         {
-            if (gameObject == null)
-                return false;
             switch (instantiationInfo.CreationMode)
             {
                 case InstanceCreationMode.FromPrefabInstance:
@@ -122,33 +119,21 @@ namespace SBaier.DI
                     _gameObjects.Add(gameObject);
                     return true;
             }
+
             return false;
         }
 
-        private void TryAddObject(UnityEngine.Object obj, InstantiationInfo instantiationInfo)
+        private void CreateNonLazyInstance(Binding binding)
         {
-            if (obj == null)
+            if (!_nonLazyBindings.ShallCreate(binding))
                 return;
-            _objects.Add(obj);
-        }
-
-        private void DestroyInstances()
-        {
-            _disposables.Dispose();
-            _objects.Destroy();
-        }
-
-        private void CreateNonLazyInstance(InstantiationInfo instantiationInfo)
-		{
-            if (!_nonLazyBindings.Has(instantiationInfo))
-                return;
-            if(instantiationInfo.ConcreteType.IsSubclassOf(typeof(Component)))
-                CreateInstance<Component>(instantiationInfo);
-            else if(instantiationInfo.ConcreteType.IsSubclassOf(typeof(UnityEngine.Object)))
-                CreateInstance<UnityEngine.Object>(instantiationInfo);
-            else 
-                CreateInstance<object>(instantiationInfo);
-            _nonLazyBindings.TryRemoving(instantiationInfo);
+            if (binding.ConcreteType.IsSubclassOf(typeof(Component)))
+                GetInstance<Component>(binding);
+            else if (binding.ConcreteType.IsSubclassOf(typeof(UnityEngine.Object)))
+                GetInstance<UnityEngine.Object>(binding);
+            else
+                GetInstance<object>(binding);
+            _nonLazyBindings.TryAddToCreated(binding);
         }
 
         private void TryInjection<TContract>(TContract instance, InstantiationInfo instantiationInfo)
@@ -169,7 +154,7 @@ namespace SBaier.DI
         }
 
         private void InjectIntoComponent(Component component, InstantiationInfo instantiationInfo)
-		{
+        {
             InjectIntoTransform(component.transform, instantiationInfo);
         }
 
@@ -179,9 +164,8 @@ namespace SBaier.DI
         }
 
         private void InjectIntoInstance<TContract>(TContract instance, InstantiationInfo instantiationInfo)
-		{
-            Injectable injectable = instance as Injectable;
-            if (injectable == null)
+        {
+            if (instance is not Injectable injectable)
                 return;
             injectable.Inject(GetResolverFor(instantiationInfo));
         }
@@ -194,6 +178,5 @@ namespace SBaier.DI
         }
 
         protected abstract Resolver CreateResolver(BindingsContainer container, DIContext diContext);
-	}
+    }
 }
-

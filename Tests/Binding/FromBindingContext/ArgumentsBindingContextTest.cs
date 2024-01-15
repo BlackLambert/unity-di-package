@@ -124,7 +124,7 @@ namespace SBaier.DI.Tests
 
         private void GivenAStorageMockAddToNonLazySetup()
         {
-            _bindingStorageMock.Setup(storage => storage.AddToNonLazy(It.IsAny<InstantiationInfo>())).
+            _bindingStorageMock.Setup(storage => storage.AddToNonLazy(It.IsAny<Binding>())).
                 Callback((InstantiationInfo info) => _addedNonLazyBindings.Add(info));
         }
 
